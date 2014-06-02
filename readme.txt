@@ -4,7 +4,7 @@ Donate link: http://codection.com
 Tags: form, login, registration, editor, lost password, responsive, wmpl, internationalization, languages, role, CAPTCHA, honeypot,  shortcode, wordpress, frontend
 Requires at least: 3.4
 Tested up to: 3.9.1
-Stable tag: 1.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -43,6 +43,8 @@ A plugin for displaying useful forms in front-end only using shortcodes. Login, 
 *   Auto linked forms, if you place a shortcode in a page/post the link between them will be automatically generated
 *   And yes, this is WordPress 3.9 ready! Also compatible with WooCommerce.
 
+You could test it here [cleanlogin.codection.com](http://cleanlogin.codection.com/). Enjoy!
+
 == Installation ==
 
 Please, refer to [./documentation/index.html#installation](documentation/index.html#installation)
@@ -53,17 +55,22 @@ Please, refer to [./documentation/index.html#settings](documentation/index.html#
 
 == Screenshots ==
 
-1. Login form (./documentation/01_login.png)
-2. Preview user (./documentation/02_preview.png)
-3. Editor form (./documentation/03_editor.png)
-4. Lost password form (./documentation/04_restore.png)
-5. Register form with CAPTCHA (./documentation/05_register.png)
-6. Setting access from the dashboard (./documentation/06_settings.jpg)
-7. Setting page from the dashboard (./documentation/07_settings.jpg)
+1. Login form
+2. Preview user
+3. Editor form
+4. Lost password form
+5. Register form with CAPTCHA
+6. Setting access from the dashboard
+7. Setting page from the dashboard
 
 == Changelog ==
 
-= 1.0 =
+= 1.0.1 =
+*   Banner created
+*   Screenshots added
+*   Demo site for testing purposes
+
+= 1.0.0 =
 *   First release
 
 == Upgrade Notice ==
