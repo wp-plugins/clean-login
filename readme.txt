@@ -74,3 +74,7 @@ Please, refer to [./documentation/index.html#settings](documentation/index.html#
 == Demo site ==
 
 [cleanlogin.codection.com](http://cleanlogin.codection.com/)
+
+== Frequently Asked Questions ==
+
+*   Not yet
