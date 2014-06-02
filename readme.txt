@@ -3,7 +3,7 @@ Contributors: hornero, carazo
 Donate link: http://codection.com
 Tags: form, login, registration, editor, lost password, responsive, wmpl, internationalization, languages, role, CAPTCHA, honeypot,  shortcode, wordpress, frontend
 Requires at least: 3.4
-Tested up to: 3.8
+Tested up to: 3.9.1
 Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
