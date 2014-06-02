@@ -12,29 +12,29 @@ A plugin for displaying useful forms in front-end only using shortcodes. Login, 
 
 == Description ==
 
-## Basics
+## **Basics**
 
 *   Add your login form in the frontend easily (page or post)
 *   And also the registration and the lost password form
 *   If user is logged in, the user will see a custom profile and will be able to edit his/her data in another front-end form
 *   One shortcode per form, you only need to create a page or post and apply this shortcode to create each form you want
 
-## Style
+## **Style**
 
 *   Every form created is Responsive
 *   CSS adapted to every theme
 
-## Spam protection
+## **Spam protection**
 
 *   Register form protected with CAPTCHA (as an option)
 *   Forms are also protected by Honeypot antispam protection
 
-## Internacionalization
+## **Internacionalization**
 
 *   WMPL ready
 *   po/mo template included
 
-## More features
+## **More features**
 
 *   Auto status checker
 *   Hide admin bar for non-admin users as an option
