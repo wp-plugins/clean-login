@@ -93,7 +93,7 @@ Then, after the package is uploaded and extracted, click&nbsp;_Activate Plugin_.
 
 Now going through the points above, you should now see a new&nbsp;_Clean Login_&nbsp;menu item under Settings menu in the sidebar of the admin panel, see figure below of how it looks like.
 
-![](http://plugins.svn.wordpress.org/clean-login/assets/doc/menu.jpg)
+<img src="http://plugins.svn.wordpress.org/clean-login/assets/doc/menu.jpg" alt="Menu" />
 
 If you get any error after following through the steps above though then please contact us through item support comments so that i can get back to you with possible helps in installing the plugin. On successful activation of this plugin, you should be able to see the login form when you place this shortcode&nbsp;_[clean-login]_&nbsp;in any page or post
 
@@ -103,26 +103,10 @@ If you get any error after following through the steps above though then please 
 
 Below, the description of each shortcode for use as registration, login, lost password and profile editor forms
 
-<table>
-<tbody>
-<tr>
-<td width="160">**[clean-login]**</td>
-<td>This shortcode contains login form and login information.</td>
-</tr>
-<tr>
-<td>**[clean-login-edit]**</td>
-<td>This shortcode contains the profile editor. If you include in a page/post a link will appear on your login preview.</td>
-</tr>
-<tr>
-<td>**[clean-login-register]**</td>
-<td>This shortcode contains the register form. If you include in a page/post a link will appear on your login form.</td>
-</tr>
-<tr>
-<td>**[clean-login-restore]**</td>
-<td>This shortcode contains the restore (lost password?) form. If you include in a page/post a link will appear on your login form.</td>
-</tr>
-</tbody>
-</table>
+*   _[clean-login]_ This shortcode contains login form and login information.
+*   _[clean-login-edit]_ This shortcode contains the profile editor. If you include in a page/post a link will appear on your login preview.
+*	_[clean-login-register]_ This shortcode contains the register form. If you include in a page/post a link will appear on your login form.
+*	_[clean-login-restore]_ This shortcode contains the restore (lost password?) form. If you include in a page/post a link will appear on your login form.
 
 Also, in the Clean Login settings page you can check the plugin status as follows:
 
