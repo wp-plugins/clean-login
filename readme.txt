@@ -49,7 +49,7 @@ You could test it here [cleanlogin.codection.com](http://cleanlogin.codection.co
 
 == Usage and Settings ==
 
-Please, refer to [./documentation/index.html#settings](documentation/index.html#settings)
+Please, refer to [Installation section](https://wordpress.org/plugins/clean-login/installation/)
 
 == Screenshots ==
 
@@ -60,11 +60,16 @@ Please, refer to [./documentation/index.html#settings](documentation/index.html#
 5. Register form with CAPTCHA
 6. Setting access from the dashboard
 7. Setting page from the dashboard
+8. Settings menu
+9. Plugin status
+10. Options section
+11. Settings updated
 
 == Changelog ==
 
 = 1.0.1 =
 *   Demo site URL updated and also the content
+*   Screenshots updated
 
 = 1.0.1 =
 *   Banner created
@@ -96,7 +101,7 @@ Please, refer to [./documentation/index.html#settings](documentation/index.html#
 
 Now going through the points above, you should now see a new&nbsp;_Clean Login_&nbsp;menu item under Settings menu in the sidebar of the admin panel, see figure below of how it looks like.
 
-![Menu](http://plugins.svn.wordpress.org/clean-login/assets/doc/menu.jpg "Settings menu")
+[Setting Menu image link](https://ps.w.org/clean-login/assets/screenshot-8.jpg)
 
 If you get any error after following through the steps above though then please contact us through item support comments so that i can get back to you with possible helps in installing the plugin. On successful activation of this plugin, you should be able to see the login form when you place this shortcode&nbsp;_[clean-login]_&nbsp;in any page or post
 
@@ -113,11 +118,11 @@ Below, the description of each shortcode for use as registration, login, lost pa
 
 Also, in the Clean Login settings page you can check the plugin status as follows:
 
-![](assets/doc/status.jpg)
+[Plugin status image link](https://ps.w.org/clean-login/assets/screenshot-9.jpg)
 
 In this setting page you can also find the way to enable/disable the differents options of the plugin, like below:
 
-![](assets/doc/options.jpg)
+[Options image link](https://ps.w.org/clean-login/assets/screenshot-10.jpg)
 
 Regarding the widget usage, just place the&nbsp;_Clean Login status and links_&nbsp;widget in the widget area you prefer. It will show the user status and the links to the pages/posts which contains the plugin shortcodes.
 
@@ -127,17 +132,13 @@ Please feel free to contact us if you have any questions.
 
 ### **Example**
 
-A post/page need to be created by typing the main shortcode&nbsp;_[clean-login]_&nbsp;in the content, as follows:
+A post/page need to be created by typing the main shortcode&nbsp;_[clean-login]_&nbsp;in the content.
 
-![](assets/doc/example.jpg)
-
-When you save or update this post/page you will see the login form:
-
-![](assets/doc/login_form.jpg)
+When you save or update this post/page you will see the login form.
 
 And also in the setting page&nbsp;_[clean-login]_&nbsp;entry will be updated pointing to the current post/page which contains the shortcode (and generates the login form):
 
-![](assets/images/settings_updated.jpg)
+[Settings updated image link](https://ps.w.org/clean-login/assets/screenshot-11.jpg)
 
 We would repeat the same process with the rest of shortcodes if we need it:
 
