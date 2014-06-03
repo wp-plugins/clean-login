@@ -12,7 +12,11 @@ A plugin for displaying useful forms in front-end only using shortcodes. Login, 
 
 == Description ==
 
-Responsive Frontend Login and Registration plugin. A plugin for displaying login, register, editor and restore password forms through shortcodes. [clean_login] [clean_login_edit] [clean_login_register] [clean_login_restore]
+Responsive Frontend Login and Registration plugin. A plugin for displaying login, register, editor and restore password forms through shortcodes.
+*   _[clean_login]_
+*   _[clean_login_edit]_
+*   _[clean_login_register]_
+*   _[clean_login_restore]_
 
 ## **Basics**
 
