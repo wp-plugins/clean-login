@@ -70,6 +70,7 @@ Please, refer to [Installation section](https://wordpress.org/plugins/clean-logi
 = 1.0.1 =
 *   Demo site URL updated and also the content
 *   Screenshots updated
+*   Documentation deleted from index.html and also updated here.
 
 = 1.0.1 =
 *   Banner created
