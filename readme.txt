@@ -84,16 +84,14 @@ Please, refer to [./documentation/index.html#settings](documentation/index.html#
 
 == Installation ==
 
-There are two ways of install the plugin:
+### **Installation**
 
-*   Unzip the zip file you downloaded from codecanyon.net. Open it, copy the 'clean-login' folder and place in your web server WordPress plugins directory using any FTP Client such as&nbsp;[CUTEFtp](http://www.cuteftp.com/),&nbsp;[WS-FTP](http://www.wsftple.com/)&nbsp;or&nbsp;[FileZilla](https://filezilla-project.org/), or else follow the step below
-*   Log in to your WordPress administration panel then click Add New in the Plugins menu on the left side and click on the Upload link at the top of the page then Locate and upload the plugin zip archive that you extracted after downloading the package.
-
-Then, after the package is uploaded and extracted, click&nbsp;_Activate Plugin_.
+*   Install **Clean Login** automatically through the WordPress Dashboard or by uploading the ZIP file in the _plugins_ directory.
+*	Then, after the package is uploaded and extracted, click&nbsp;_Activate Plugin_.
 
 Now going through the points above, you should now see a new&nbsp;_Clean Login_&nbsp;menu item under Settings menu in the sidebar of the admin panel, see figure below of how it looks like.
 
-<img src="http://plugins.svn.wordpress.org/clean-login/assets/doc/menu.jpg" alt="Menu" />
+![Menu](http://plugins.svn.wordpress.org/clean-login/assets/doc/menu.jpg "Settings menu")
 
 If you get any error after following through the steps above though then please contact us through item support comments so that i can get back to you with possible helps in installing the plugin. On successful activation of this plugin, you should be able to see the login form when you place this shortcode&nbsp;_[clean-login]_&nbsp;in any page or post
 
