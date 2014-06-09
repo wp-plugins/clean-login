@@ -14,10 +14,10 @@ A plugin for displaying useful forms in front-end only using shortcodes. Login, 
 
 Responsive Frontend Login and Registration plugin. A plugin for displaying login, register, editor and restore password forms through shortcodes.
 
-*   _[clean_login]_
-*   _[clean_login_edit]_
-*   _[clean_login_register]_
-*   _[clean_login_restore]_
+*   _[clean-login]_
+*   _[clean-login-edit]_
+*   _[clean-login-register]_
+*   _[clean-login-restore]_
 
 ## **Basics**
 
@@ -72,7 +72,10 @@ Please, refer to [Installation section](https://wordpress.org/plugins/clean-logi
 
 == Changelog ==
 
-= 1.0.1 =
+= 1.0.3 =
+*   Mistake solved under plugin description. Thanks to WP-Biz (Ryan)
+
+= 1.0.2 =
 *   Demo site URL updated and also the content
 *   Screenshots updated
 *   Documentation deleted from index.html and also updated here.
