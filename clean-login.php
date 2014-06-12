@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Clean_Login
- * @version 1.0.3
+ * @version 1.0.4
  */
 /*
 Plugin Name: Clean Login
 Plugin URI: http://cleanlogin.codection.com
-Description: Responsive Frontend Login and Registration plugin. A plugin for displaying login, register, editor and restore password forms through shortcodes. [clean_login] [clean_login_edit] [clean_login_register] [clean_login_restore]
+Description: Responsive Frontend Login and Registration plugin. A plugin for displaying login, register, editor and restore password forms through shortcodes. [clean-login] [clean-login-edit] [clean-login-register] [clean-login-restore]
 Author: codection
-Version: 1.0.3
+Version: 1.0.4
 Author URI: https://codection.com
 */
 
@@ -30,6 +30,8 @@ add_action( 'wp_enqueue_scripts', 'clean_login_enqueue_style' );
  */
 function show_clean_login($atts) {
 
+	ob_start();
+	
 	if ( isset( $_GET['authentication'] ) ) {
 		if ( $_GET['authentication'] == 'success' )
 			echo "<div class='cleanlogin-notification success'><p>". __( 'Successfully logged in!', 'cleanlogin' ) ."</p></div>";
@@ -48,6 +50,8 @@ function show_clean_login($atts) {
 		require( 'content/login-form.php' );
 	}
 
+	return ob_get_clean();
+
 }
 add_shortcode('clean-login', 'show_clean_login');
 
@@ -58,6 +62,8 @@ add_shortcode('clean-login', 'show_clean_login');
  */
 function show_clean_login_edit($atts) {
 	
+	ob_start();
+
 	if ( isset( $_GET['updated'] ) ) {
 		if ( $_GET['updated'] == 'success' )
 			echo "<div class='cleanlogin-notification success'><p>". __( 'Information updated', 'cleanlogin' ) ."</p></div>";
@@ -78,6 +84,9 @@ function show_clean_login_edit($atts) {
 		if ( $login_url != '' )
 			echo "<script>window.location = '$login_url'</script>";*/
 	}
+
+	return ob_get_clean();
+
 }
 add_shortcode('clean-login-edit', 'show_clean_login_edit');
 
@@ -87,6 +96,9 @@ add_shortcode('clean-login-edit', 'show_clean_login_edit');
  * @since 0.8
  */
 function show_clean_login_register($atts) {
+	
+	ob_start();
+
 	if ( isset( $_GET['created'] ) ) {
 		if ( $_GET['created'] == 'success' )
 			echo "<div class='cleanlogin-notification success'><p>". __( 'User created', 'cleanlogin' ) ."</p></div>";
@@ -114,6 +126,8 @@ function show_clean_login_register($atts) {
 			echo "<script>window.location = '$login_url'</script>";*/
 	}
 
+	return ob_get_clean();
+
 }
 add_shortcode('clean-login-register', 'show_clean_login_register');
 
@@ -123,6 +137,9 @@ add_shortcode('clean-login-register', 'show_clean_login_register');
  * @since 0.8
  */
 function show_clean_login_restore($atts) {
+
+	ob_start();
+
 	if ( isset( $_GET['sent'] ) ) {
 		if ( $_GET['sent'] == 'success' )
 			echo "<div class='cleanlogin-notification success'><p>". __( 'You will receive an email with the activation link', 'cleanlogin' ) ."</p></div>";
@@ -148,6 +165,8 @@ function show_clean_login_restore($atts) {
 		if ( $login_url != '' )
 			echo "<script>window.location = '$login_url'</script>";*/
 	}
+
+	return ob_get_clean();
 
 }
 add_shortcode('clean-login-restore', 'show_clean_login_restore');
