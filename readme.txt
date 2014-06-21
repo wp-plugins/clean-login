@@ -39,7 +39,7 @@ Responsive Frontend Login and Registration plugin. A plugin for displaying login
 ## **Internacionalization**
 
 *   WMPL ready
-*   po/mo template included
+*   .po/.mo template included
 
 ## **More features**
 
