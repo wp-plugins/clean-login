@@ -115,7 +115,7 @@ Now going through the points above, you should now see a new&nbsp;_Clean Login_&
 
 [Setting Menu image link](https://ps.w.org/clean-login/assets/screenshot-8.jpg)
 
-If you get any error after following through the steps above though then please contact us through item support comments so that i can get back to you with possible helps in installing the plugin. On successful activation of this plugin, you should be able to see the login form when you place this shortcode&nbsp;_[clean-login]_&nbsp;in any page or post
+If you get any error after following through the steps above please contact us through item support comments so we can get back to you with possible helps in installing the plugin and more. On successful activation of this plugin, you should be able to see the login form when you place this shortcode&nbsp;_[clean-login]_&nbsp;in any page or post
 
 * * *
 
