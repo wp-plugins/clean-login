@@ -1,7 +1,7 @@
 === Clean Login ===
 Contributors: hornero, carazo
 Donate link: http://codection.com
-Tags: form, login, registration, editor, lost password, responsive, wmpl, internationalization, languages, role, CAPTCHA, honeypot,  shortcode, wordpress, frontend
+Tags: form, login, registration, editor, lost password, responsive, wpml, internationalization, languages, role, CAPTCHA, honeypot, shortcode, wordpress, frontend
 Requires at least: 3.4
 Tested up to: 3.9.1
 Stable tag: 1.0.4
