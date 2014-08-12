@@ -176,7 +176,7 @@ add_shortcode('clean-login-restore', 'show_clean_login_restore');
  *
  * @since 0.8
  */
-function load_before_headers() {
+function clean_login_load_before_headers() {
 	global $wp_query; 
 	if ( is_singular() ) { 
 		$post = $wp_query->get_queried_object(); 
@@ -184,7 +184,7 @@ function load_before_headers() {
 		if ( strpos($post->post_content, 'clean-login' ) !== false ) {
 
 			// Sets the redirect url to the current page 
-			$url = url_cleaner( wp_get_referer() );
+			$url = clean_login_url_cleaner( wp_get_referer() );
 
 			// LOGIN
 			if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'login' ) {
@@ -295,10 +295,10 @@ function load_before_headers() {
 						else
 							$message = sprintf( __( "New user registered: %s <br/>", 'cleanlogin' ), $username );
 						
-						add_filter( 'wp_mail_content_type', 'set_html_content_type' );
+						add_filter( 'wp_mail_content_type', 'clean_login_set_html_content_type' );
 						if( !wp_mail( $adminemail, "[$blog_title] New user" , $message ) )
 							$url = add_query_arg( 'sent', 'failed', $url );
-						remove_filter( 'wp_mail_content_type', 'set_html_content_type' );
+						remove_filter( 'wp_mail_content_type', 'clean_login_set_html_content_type' );
 
 					}
 				}
@@ -328,10 +328,10 @@ function load_before_headers() {
 					$blog_title = get_bloginfo();
 					$message = sprintf( __( "Use the following link to restore your password: <a href='%s'>restore your password</a> <br/><br/>%s<br/>", 'cleanlogin' ), $url_msg, $blog_title );
 
-					add_filter( 'wp_mail_content_type', 'set_html_content_type' );
+					add_filter( 'wp_mail_content_type', 'clean_login_set_html_content_type' );
 					if( !wp_mail( $email, "[$blog_title] Restore your password" , $message ) )
 						$url = add_query_arg( 'sent', 'failed', $url );
-					remove_filter( 'wp_mail_content_type', 'set_html_content_type' );
+					remove_filter( 'wp_mail_content_type', 'clean_login_set_html_content_type' );
 
 				}
 
@@ -375,7 +375,7 @@ function load_before_headers() {
 		} 
 	}
 }
-add_action('template_redirect', 'load_before_headers');
+add_action('template_redirect', 'clean_login_load_before_headers');
 
 /**
  * Cleans an url
@@ -383,7 +383,7 @@ add_action('template_redirect', 'load_before_headers');
  * @since 0.8
  * @param url to be cleaned
  */
-function url_cleaner( $url ) {
+function clean_login_url_cleaner( $url ) {
 	$query_args = array(
 		'authentication',
 		'updated',
@@ -399,7 +399,7 @@ function url_cleaner( $url ) {
  *
  * @since 0.8
  */
-function set_html_content_type()
+function clean_login_set_html_content_type()
 {
     return 'text/html';
 }
@@ -409,13 +409,13 @@ function set_html_content_type()
  *
  * @since 0.8
  */
-function remove_admin_bar() {
+function clean_login_remove_admin_bar() {
 	$remove_adminbar = get_option( 'cl_adminbar' ) == 'on' ? true : false;
 
 	if ( $remove_adminbar && !current_user_can( 'manage_options' ) )
     	show_admin_bar( false );
 }
-add_action('after_setup_theme', 'remove_admin_bar');
+add_action('after_setup_theme', 'clean_login_remove_admin_bar');
 
 /**
  * It will only enable the dashboard for users with administrative privileges
@@ -423,7 +423,7 @@ add_action('after_setup_theme', 'remove_admin_bar');
  *
  * @since 0.9
  */
-function block_dashboard_access() {
+function clean_login_block_dashboard_access() {
 	$block_dashboard = get_option( 'cl_dashboard' ) == 'on' ? true : false;
 
 	if ( $block_dashboard && is_admin() && !current_user_can( 'manage_options' ) ) {
@@ -431,7 +431,7 @@ function block_dashboard_access() {
 		exit;
 	}
 }
-add_action( 'init', 'block_dashboard_access' );
+add_action( 'init', 'clean_login_block_dashboard_access' );
 
 /**
  * session_start();
@@ -439,11 +439,11 @@ add_action( 'init', 'block_dashboard_access' );
  * @since 0.9
  */
 
-function register_session(){
+function clean_login_register_session(){
     if( !session_id() )
         session_start();
 }
-add_action('init','register_session');
+add_action('init','clean_login_register_session');
 
 /**
  * Detect shortcodes and update the plugin options
@@ -451,7 +451,7 @@ add_action('init','register_session');
  * @since 0.8
  * @param post_id of an updated post
  */
-function get_pages_with_shortcodes( $post_id ) {
+function clean_login_get_pages_with_shortcodes( $post_id ) {
 
 	$revision = wp_is_post_revision( $post_id );
 
@@ -476,14 +476,14 @@ function get_pages_with_shortcodes( $post_id ) {
 	}
 
 }
-add_action( 'save_post', 'get_pages_with_shortcodes' );
+add_action( 'save_post', 'clean_login_get_pages_with_shortcodes' );
 
 /**
  * Add a role without any capability
  *
  * @since 0.8
  */
-function add_roles() {
+function clean_login_add_roles() {
 
 	$create_standby_role = get_option( 'cl_standby' ) == 'on' ? true : false;
 	$role = get_role( 'standby' );
@@ -500,17 +500,17 @@ function add_roles() {
 			remove_role( 'standby' );
 	}
 }
-add_action( 'admin_init', 'add_roles');
+add_action( 'admin_init', 'clean_login_add_roles');
 
 /**
 * Add plugin text domain
 *
 * @since 0.8
 */
-function load_clean_login_textdomain(){
+function clean_login_load_textdomain(){
 	load_plugin_textdomain( 'cleanlogin', false, dirname( plugin_basename( __FILE__ ) ) . '/lang/' );
 }
-add_action( 'plugins_loaded', 'load_clean_login_textdomain' );
+add_action( 'plugins_loaded', 'clean_login_load_textdomain' );
 
 
 /*  __               __                  __               __  _                 
