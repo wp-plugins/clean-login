@@ -74,7 +74,7 @@ Please, refer to [Installation section](https://wordpress.org/plugins/clean-logi
 
 = 1.0.5 =
 *   Prepend all the functions names by ensuring the plugin compatibility and stability. Thanks to dharmashanti
-*	Tested on 3.9.2
+*   Tested on 3.9.2
 
 = 1.0.4 =
 *   Output buffering turned on, following the Shortcode API. Thanks to stewarty
