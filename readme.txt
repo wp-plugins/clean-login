@@ -4,7 +4,7 @@ Donate link: http://codection.com
 Tags: form, login, registration, editor, lost password, responsive, wpml, internationalization, languages, role, CAPTCHA, honeypot, shortcode, wordpress, frontend
 Requires at least: 3.4
 Tested up to: 3.9.2
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,7 @@ Responsive Frontend Login and Registration plugin. A plugin for displaying login
 
 *   WMPL ready
 *   .po/.mo template included
+*	English, Spanish and French languages included by default
 
 ## **More features**
 
@@ -71,6 +72,9 @@ Please, refer to [Installation section](https://wordpress.org/plugins/clean-logi
 11. Settings updated
 
 == Changelog ==
+
+= 1.0.6 =
+*   French language included. Thanks to Blasteur83 (Dylan Lane)
 
 = 1.0.5 =
 *   Prepend all the functions names by ensuring the plugin compatibility and stability. Thanks to dharmashanti
