@@ -4,7 +4,7 @@ Donate link: http://codection.com
 Tags: form, login, registration, editor, lost password, responsive, wpml, internationalization, languages, role, CAPTCHA, honeypot, shortcode, wordpress, frontend
 Requires at least: 3.4
 Tested up to: 3.9.2
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,6 +72,9 @@ Please, refer to [Installation section](https://wordpress.org/plugins/clean-logi
 11. Settings updated
 
 == Changelog ==
+
+= 1.1.2 =
+*	Simplifying the placeholder in the restore form by ensuring external plugins (which replace strings) compatibility.
 
 = 1.1.1 =
 *   Bug detected: First name and last name of the current user is hidden if the username is hidden by settings. Solved!
