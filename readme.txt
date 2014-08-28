@@ -74,8 +74,8 @@ Please, refer to [Installation section](https://wordpress.org/plugins/clean-logi
 == Changelog ==
 
 = 1.1.0 =
-*   Enabling to permit users to reset their password using their email. Feature supported by KTS915 (Tim Kaye)
-*   The username can be switched off from the preview form. Feature supported by KTS915 (Tim Kaye)
+*   Enabling to permit users to reset their password using their email. Feature supported by KTS915
+*   The username can be switched off from the preview form. Feature supported by KTS915
 *   Spanish language updated.
 
 = 1.0.6 =
