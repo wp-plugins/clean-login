@@ -4,7 +4,7 @@ Donate link: http://codection.com
 Tags: form, login, registration, editor, lost password, responsive, wpml, internationalization, languages, role, CAPTCHA, honeypot, shortcode, wordpress, frontend
 Requires at least: 3.4
 Tested up to: 3.9.2
-Stable tag: 1.0.6
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,6 +72,11 @@ Please, refer to [Installation section](https://wordpress.org/plugins/clean-logi
 11. Settings updated
 
 == Changelog ==
+
+= 1.1.0 =
+*   Enabling to permit users to reset their password using their email. Feature supported by KTS915 (Tim Kaye)
+*   The username can be switched off from the preview form. Feature supported by KTS915 (Tim Kaye)
+*   Spanish language updated.
 
 = 1.0.6 =
 *   French language included. Thanks to Blasteur83 (Dylan Lane)

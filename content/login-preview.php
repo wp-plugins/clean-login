@@ -2,6 +2,7 @@
 	global $current_user;
 	get_currentuserinfo();
 	$edit_url = get_option( 'cl_edit_url', '');
+	$show_user_information = get_option( 'cl_hideuser' ) == 'on' ? false : true;
 ?>
 
 <div class="cleanlogin-container" >
@@ -15,9 +16,14 @@
 		
 		<?php echo get_avatar( $current_user->ID, 128 ); ?>
 
+		<?php // Since 1.1 (show username or not) ?>
+		<?php if ( $show_user_information ): ?>
+		
 		<h4>
 			<?php echo $current_user->user_login; ?>
 			<small><?php echo $current_user->user_firstname . ' ' . $current_user->user_lastname; ?></small>
 		</h4>
+
+		<?php endif;?>
 	</div>		
 </div>

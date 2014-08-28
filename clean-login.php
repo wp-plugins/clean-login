@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Clean_Login
- * @version 1.0.6
+ * @version 1.1.0
  */
 /*
 Plugin Name: Clean Login
 Plugin URI: http://cleanlogin.codection.com
 Description: Responsive Frontend Login and Registration plugin. A plugin for displaying login, register, editor and restore password forms through shortcodes. [clean-login] [clean-login-edit] [clean-login-register] [clean-login-restore]
 Author: codection
-Version: 1.0.6
+Version: 1.1.0
 Author URI: https://codection.com
 */
 
@@ -312,6 +312,15 @@ function clean_login_load_before_headers() {
 				$username = isset( $_POST['username'] ) ? $_POST['username'] : '';
 				$website = isset( $_POST['website'] ) ? $_POST['website'] : '';
 
+				// Since 1.1 (get username from email if so)
+				if ( is_email( $username ) ) {
+					$userFromMail = get_user_by( 'email', $username );
+					if ( $userFromMail == false )
+						$username = '';
+					else
+						$username = $userFromMail->user_login;
+				}
+
 				// honeypot detection
 				if( $website != ' ' )
 					$url = add_query_arg( 'sent', 'sent', $url );
@@ -605,6 +614,8 @@ function clean_login_options() {
         update_option( 'cl_dashboard', isset( $_POST['dashboard'] ) ? $_POST['dashboard'] : '' );
         update_option( 'cl_antispam', isset( $_POST['antispam'] ) ? $_POST['antispam'] : '' );
         update_option( 'cl_standby', isset( $_POST['standby'] ) ? $_POST['standby'] : '' );
+        update_option( 'cl_hideuser', isset( $_POST['hideuser'] ) ? $_POST['hideuser'] : '' );
+
 		
 		echo '<div class="updated"><p><strong>'. __( 'Settings saved.', 'cleanlogin' ) .'</strong></p></div>';
     }
@@ -614,6 +625,7 @@ function clean_login_options() {
     $dashboard = get_option( 'cl_dashboard' );
     $antispam = get_option( 'cl_antispam' );
     $standby = get_option( 'cl_standby' );
+    $hideuser = get_option ( 'cl_hideuser' );
 
     ?>
     	<form name="form1" method="post" action="">
@@ -643,8 +655,15 @@ function clean_login_options() {
 				<tr>
 					<th scope="row"><?php echo __( 'User Standby role', 'cleanlogin' ); ?></th>
 					<td>
-						<label><input name="standby" type="checkbox" id="ustandby" <?php if( $standby == 'on' ) echo 'checked="checked"'; ?>><?php echo __( 'Enable Standby role?', 'cleanlogin' ); ?></label>
+						<label><input name="standby" type="checkbox" id="standby" <?php if( $standby == 'on' ) echo 'checked="checked"'; ?>><?php echo __( 'Enable Standby role?', 'cleanlogin' ); ?></label>
 						<p class="description"><?php echo __( 'Standby role disables all the capabilities for new users, until the administrator changes. It usefull for site with restricted components.', 'cleanlogin' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php echo __( 'Hide username', 'cleanlogin' ); ?></th>
+					<td>
+						<label><input name="hideuser" type="checkbox" id="hideuser" <?php if( $hideuser == 'on' ) echo 'checked="checked"'; ?>><?php echo __( 'Hide username?', 'cleanlogin' ); ?></label>
+						<p class="description"><?php echo __( 'Hide username from the preview form.', 'cleanlogin' ); ?></p>
 					</td>
 				</tr>
 
