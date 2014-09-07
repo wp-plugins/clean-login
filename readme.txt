@@ -49,7 +49,7 @@ Responsive Frontend Login and Registration plugin. A plugin for displaying login
 *   Disable dashboard access as an option
 *   Standby user role for new user registration. With no capabilities, to allow admin approval of users optionally
 *   Auto linked forms, if you place a shortcode in a page/post the link between them will be automatically generated
-*   And yes, this is WordPress 3.9 ready! Also compatible with WooCommerce.
+*   And yes, this is WordPress 4.0 ready! Also compatible with WooCommerce.
 
 You could test it here [cleanlogin.codection.com](http://cleanlogin.codection.com/). Enjoy!
 
