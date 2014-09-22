@@ -35,7 +35,7 @@
 		</fieldset>
 
 		<div>	
-			<input type="submit" value="<?php echo __( 'Register', 'cleanlogin' ); ?>" name="submit">
+			<input type="submit" value="<?php echo __( 'Register', 'cleanlogin' ); ?>" name="submit" onclick="this.form.submit(); this.disabled = true;">
 			<input type="hidden" name="action" value="register">		
 		</div>
 
