@@ -74,6 +74,9 @@ Please, refer to [Installation section](https://wordpress.org/plugins/clean-logi
 
 == Changelog ==
 
+= 1.1.6 =
+*   Hebrew language updated. Thanks again to Ahrale (from Atar4U)
+
 = 1.1.5 =
 *   Hebrew language included. Thanks to Ahrale (from Atar4U)
 *   Tested on 4.1

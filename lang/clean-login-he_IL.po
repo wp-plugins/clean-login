@@ -12,8 +12,8 @@ msgstr ""
 "Language-Team: Ahrale, Atar4U.com <contact@atar4u.com>\n"
 "MIME-Version: 1.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: he_IL\n"
-"X-Generator: Poedit 1.7.3\n"
+"Language: he\n"
+"X-Generator: Poedit 1.7.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 # <div>
