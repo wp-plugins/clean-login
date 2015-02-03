@@ -38,7 +38,7 @@ Responsive Frontend Login and Registration plugin. A plugin for displaying login
 
 ## **Internacionalization**
 
-*   WMPL ready (with [oficial certification](http://wpml.org/plugin/clean-login/))
+*   WMPL ready with [oficial certification](http://wpml.org/plugin/clean-login/)
 *   .po/.mo template included
 *	English, Spanish and French languages included by default
 
