@@ -139,7 +139,7 @@ Please, refer to [Installation section](https://wordpress.org/plugins/clean-logi
 
 == Installation ==
 
-### **Installation**
+### Installation
 
 *   Install **Clean Login** automatically through the WordPress Dashboard or by uploading the ZIP file in the _plugins_ directory.
 *   Then, after the package is uploaded and extracted, click&nbsp;_Activate Plugin_.
@@ -152,7 +152,7 @@ If you get any error after following through the steps above please contact us t
 
 * * *
 
-### **Settings**
+### Settings
 
 Below, the description of each shortcode for use as registration, login, lost password and profile editor forms
 
@@ -175,7 +175,7 @@ Please feel free to contact us if you have any questions.
 
 * * *
 
-### **Example**
+### Example
 
 A post/page need to be created by typing the main shortcode&nbsp;_[clean-login]_&nbsp;in the content.
 
