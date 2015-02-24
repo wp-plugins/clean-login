@@ -74,7 +74,7 @@ Please, refer to [Installation section](https://wordpress.org/plugins/clean-logi
 
 == Changelog ==
 
-= 1.1.8 =
+= 1.1.9 =
 *   Improving captcha visibility (higher font size). Thanks to plentyland for the feedback.
 *   WP Super Cache full compatibility (https://wordpress.org/plugins/wp-super-cache/)
 
