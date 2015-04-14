@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Clean_Login
- * @version 1.1.11
+ * @version 1.2
  */
 /*
 Plugin Name: Clean Login
 Plugin URI: http://cleanlogin.codection.com
 Description: Responsive Frontend Login and Registration plugin. A plugin for displaying login, register, editor and restore password forms through shortcodes. [clean-login] [clean-login-edit] [clean-login-register] [clean-login-restore]
 Author: codection
-Version: 1.1.11
+Version: 1.2
 Author URI: https://codection.com
 */
 
@@ -67,6 +67,8 @@ function show_clean_login_edit($atts) {
 	if ( isset( $_GET['updated'] ) ) {
 		if ( $_GET['updated'] == 'success' )
 			echo "<div class='cleanlogin-notification success'><p>". __( 'Information updated', 'cleanlogin' ) ."</p></div>";
+		else if ( $_GET['updated'] == 'passcomplex' )
+			echo "<div class='cleanlogin-notification error'><p>". __( 'Passwords must be eight characters including one upper/lowercase letter, one special/symbol character and alphanumeric characters. Passwords should not contain the user\'s username, email, or first/last name.', 'cleanlogin' ) ."</p></div>";
 		else if ( $_GET['updated'] == 'wrongpass' )
 			echo "<div class='cleanlogin-notification error'><p>". __( 'Passwords must be identical', 'cleanlogin' ) ."</p></div>";
 		else if ( $_GET['updated'] == 'wrongmail' )
@@ -104,6 +106,8 @@ function show_clean_login_register($atts) {
 			echo "<div class='cleanlogin-notification success'><p>". __( 'User created', 'cleanlogin' ) ."</p></div>";
 		else if ( $_GET['created'] == 'created' )
 			echo "<div class='cleanlogin-notification success'><p>". __( 'New user created', 'cleanlogin' ) ."</p></div>";
+		else if ( $_GET['created'] == 'passcomplex' )
+			echo "<div class='cleanlogin-notification error'><p>". __( 'Passwords must be eight characters including one upper/lowercase letter, one special/symbol character and alphanumeric characters. Passwords should not contain the user\'s username, email, or first/last name.', 'cleanlogin' ) ."</p></div>";
 		else if ( $_GET['created'] == 'wronguser' )
 			echo "<div class='cleanlogin-notification error'><p>". __( 'Username is not valid', 'cleanlogin' ) ."</p></div>";
 		else if ( $_GET['created'] == 'wrongpass' )
@@ -171,6 +175,32 @@ function show_clean_login_restore($atts) {
 }
 add_shortcode('clean-login-restore', 'show_clean_login_restore');
 
+
+/**
+ * Password complexity checker
+ *
+ * @since 1.2
+ */
+function is_password_complex($candidate) {
+   $r1='/[A-Z]/';  //Uppercase
+   $r2='/[a-z]/';  //Lowercase
+   $r3='/[!@#$%^&*()\-_=+{};:,<.>]/';  //Special character
+   $r4='/[0-9]/';  //Numbers
+
+   if(preg_match_all($r1,$candidate, $o)<2) return FALSE;
+
+   if(preg_match_all($r2,$candidate, $o)<2) return FALSE;
+
+   if(preg_match_all($r3,$candidate, $o)<2) return FALSE;
+
+   if(preg_match_all($r4,$candidate, $o)<2) return FALSE;
+
+   if(strlen($candidate)<8) return FALSE;
+
+   return TRUE;
+}
+
+
 /**
  * Custom code to be loaded before headers
  *
@@ -229,12 +259,21 @@ function clean_login_load_before_headers() {
 					$userdata['user_email'] = $email;
 				}
 
+
+				// check if password complexity is checked
+				$enable_passcomplex = get_option( 'cl_passcomplex' ) == 'on' ? true : false;
+
+				// password complexity checker
+				
 				if ( isset( $_POST['pass1'] ) && ! empty( $_POST['pass1'] ) ) {
 					if ( ! isset( $_POST['pass2'] ) || ( isset( $_POST['pass2'] ) && $_POST['pass2'] != $_POST['pass1'] ) ) {
 						$url = add_query_arg( 'updated', 'wrongpass', $url );
 					}
 					else {
-						$userdata['user_pass'] = $_POST['pass1'];
+						if( $enable_passcomplex && !is_password_complex($_POST['pass1']) )
+							$url = add_query_arg( 'updated', 'passcomplex', $url );
+						else
+							$userdata['user_pass'] = $_POST['pass1'];
 					}
 					
 				}
@@ -261,10 +300,15 @@ function clean_login_load_before_headers() {
 
 				// check if captcha is checked
 				$enable_captcha = get_option( 'cl_antispam' ) == 'on' ? true : false;
+				// check if password complexity is checked
+				$enable_passcomplex = get_option( 'cl_passcomplex' ) == 'on' ? true : false;
 
+				// password complexity checker
+				if( $enable_passcomplex && !is_password_complex($pass1) )
+					$url = add_query_arg( 'created', 'passcomplex', $url );
 				// captcha enabled
-				if( $enable_captcha && $captcha != $captcha_session )
-						$url = add_query_arg( 'created', 'wrongcaptcha', $url );
+				else if( $enable_captcha && $captcha != $captcha_session )
+					$url = add_query_arg( 'created', 'wrongcaptcha', $url );
 				// honeypot detection
 				else if( $website != ' ' )
 					$url = add_query_arg( 'created', 'created', $url );
@@ -354,7 +398,7 @@ function clean_login_load_before_headers() {
 
 				$retrieved_nonce = $_REQUEST['_wpnonce'];
 				if ( !wp_verify_nonce($retrieved_nonce, $user_id ) )
-					die( 'Failed security check' );
+					die( 'Failed security check, expired Activation Link due to duplication or date.' );
 
 				$edit_url = get_option( 'cl_edit_url', '');
 				
@@ -368,7 +412,13 @@ function clean_login_load_before_headers() {
 				// If not, a new password will be generated and notified
 				} else {
 					$url = get_option( 'cl_restore_url', '');
-					$new_password = wp_generate_password(8, false);
+					// check if password complexity is checked
+					$enable_passcomplex = get_option( 'cl_passcomplex' ) == 'on' ? true : false;
+					
+					if($enable_passcomplex)
+						$new_password = wp_generate_password(12, true);
+					else
+						$new_password = wp_generate_password(8, false);
 
 					$user_id = wp_update_user( array( 'ID' => $user_id, 'user_pass' => $new_password ) );
 
@@ -615,6 +665,8 @@ function clean_login_options() {
         update_option( 'cl_antispam', isset( $_POST['antispam'] ) ? $_POST['antispam'] : '' );
         update_option( 'cl_standby', isset( $_POST['standby'] ) ? $_POST['standby'] : '' );
         update_option( 'cl_hideuser', isset( $_POST['hideuser'] ) ? $_POST['hideuser'] : '' );
+        update_option( 'cl_passcomplex', isset( $_POST['passcomplex'] ) ? $_POST['passcomplex'] : '' );
+        
 
 		
 		echo '<div class="updated"><p><strong>'. __( 'Settings saved.', 'cleanlogin' ) .'</strong></p></div>';
@@ -626,6 +678,7 @@ function clean_login_options() {
     $antispam = get_option( 'cl_antispam' );
     $standby = get_option( 'cl_standby' );
     $hideuser = get_option ( 'cl_hideuser' );
+    $passcomplex = get_option ( 'cl_passcomplex' );
 
     ?>
     	<form name="form1" method="post" action="">
@@ -666,8 +719,13 @@ function clean_login_options() {
 						<p class="description"><?php echo __( 'Hide username from the preview form.', 'cleanlogin' ); ?></p>
 					</td>
 				</tr>
-
-
+				<tr>
+					<th scope="row"><?php echo __( 'Password complexity', 'cleanlogin' ); ?></th>
+					<td>
+						<label><input name="passcomplex" type="checkbox" id="passcomplex" <?php if( $passcomplex == 'on' ) echo 'checked="checked"'; ?>><?php echo __( 'Enable password complexity?', 'cleanlogin' ); ?></label>
+						<p class="description"><?php echo __( 'Passwords must be eight characters including one upper/lowercase letter, one special/symbol character and alphanumeric characters. Passwords should not contain the user\'s username, email, or first/last name.', 'cleanlogin' ); ?></p>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 		<input type="hidden" name="<?php echo $hidden_field_name; ?>" value="<?php echo $hidden_field_value; ?>">
