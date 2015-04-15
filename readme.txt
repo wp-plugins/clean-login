@@ -74,8 +74,12 @@ Please, refer to [Installation section](https://wordpress.org/plugins/clean-logi
 
 == Changelog ==
 
+= 1.2.1 =
+*   Rusian language included. Thanks to Anastassiya Polyakova
+*	Hebrew language filename fixed
+
 = 1.2 =
-*   Password complexity. Passwords must be eight characters including one upper/lowercase letter, one special/symbol character and alphanumeric characters. Passwords should not contain the user\'s username, email, or first/last name.Feature supported by Steve Scofield
+*   Password complexity as option. Passwords must be eight characters including one upper/lowercase letter, one special/symbol character and alphanumeric characters. Passwords should not contain the user\'s username, email, or first/last name. Feature supported by Steve Scofield
 *	"Failed security check" replaced by "Failed security check, expired Activation Link due to duplication or date."
 
 = 1.1.11 =
