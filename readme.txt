@@ -4,7 +4,7 @@ Donate link: http://codection.com
 Tags: form, login, registration, editor, lost password, responsive, wpml, internationalization, languages, role, CAPTCHA, honeypot, shortcode, wordpress, frontend
 Requires at least: 3.4
 Tested up to: 4.1.1
-Stable tag: 1.2
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,12 +74,15 @@ Please, refer to [Installation section](https://wordpress.org/plugins/clean-logi
 
 == Changelog ==
 
+= 1.2.2 =
+*   Bug fixed in password complexity checker. Thanks to Steve Scofield for reporting
+
 = 1.2.1 =
-*   Rusian language included. Thanks to Anastassiya Polyakova
+*   Russian language included. Thanks to Anastassiya Polyakova
 *	Hebrew language filename fixed
 
 = 1.2 =
-*   Password complexity as option. Passwords must be eight characters including one upper/lowercase letter, one special/symbol character and alphanumeric characters. Passwords should not contain the user\'s username, email, or first/last name. Feature supported by Steve Scofield
+*   Password complexity as option. Passwords must be at least eight characters including one upper/lowercase letter, one special/symbol character and alphanumeric characters. Passwords should not contain the user\'s username, email, or first/last name. Feature supported by Steve Scofield
 *	"Failed security check" replaced by "Failed security check, expired Activation Link due to duplication or date."
 
 = 1.1.11 =

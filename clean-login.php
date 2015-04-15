@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Clean_Login
- * @version 1.2.1
+ * @version 1.2.2
  */
 /*
 Plugin Name: Clean Login
 Plugin URI: http://cleanlogin.codection.com
 Description: Responsive Frontend Login and Registration plugin. A plugin for displaying login, register, editor and restore password forms through shortcodes. [clean-login] [clean-login-edit] [clean-login-register] [clean-login-restore]
 Author: codection
-Version: 1.2.1
+Version: 1.2.2
 Author URI: https://codection.com
 */
 
@@ -182,22 +182,20 @@ add_shortcode('clean-login-restore', 'show_clean_login_restore');
  * @since 1.2
  */
 function is_password_complex($candidate) {
-   $r1='/[A-Z]/';  //Uppercase
-   $r2='/[a-z]/';  //Lowercase
-   $r3='/[!@#$%^&*()\-_=+{};:,<.>]/';  //Special character
-   $r4='/[0-9]/';  //Numbers
 
-   if(preg_match_all($r1,$candidate, $o)<2) return FALSE;
+	if (!preg_match_all('$\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])(?=\S*[\W])\S*$', $candidate))
+        return false;
+    return true;
 
-   if(preg_match_all($r2,$candidate, $o)<2) return FALSE;
-
-   if(preg_match_all($r3,$candidate, $o)<2) return FALSE;
-
-   if(preg_match_all($r4,$candidate, $o)<2) return FALSE;
-
-   if(strlen($candidate)<8) return FALSE;
-
-   return TRUE;
+    /* Explaining $\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])(?=\S*[\W])\S*$
+    $ = beginning of string
+    \S* = any set of characters
+    (?=\S{8,}) = of at least length 8
+    (?=\S*[a-z]) = containing at least one lowercase letter
+    (?=\S*[A-Z]) = and at least one uppercase letter
+    (?=\S*[\d]) = and at least one number
+    (?=\S*[\W]) = and at least a special character (non-word characters)
+    $ = end of the string */
 }
 
 
