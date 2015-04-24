@@ -3,8 +3,8 @@ Contributors: hornero, carazo
 Donate link: http://codection.com
 Tags: form, login, registration, editor, lost password, responsive, wpml, internationalization, languages, role, CAPTCHA, honeypot, shortcode, wordpress, frontend
 Requires at least: 3.4
-Tested up to: 4.1.1
-Stable tag: 1.2.2
+Tested up to: 4.2
+Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -73,6 +73,10 @@ Please, refer to [Installation section](https://wordpress.org/plugins/clean-logi
 12. WPML. Certificate of Compatibility
 
 == Changelog ==
+
+= 1.2.3 =
+*   French language updated. Thanks to Alain Sole
+*   Tested on 4.2
 
 = 1.2.2 =
 *   Bug fixed in password complexity checker. Thanks to Steve Scofield for reporting
