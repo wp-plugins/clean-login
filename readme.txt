@@ -4,7 +4,7 @@ Donate link: http://codection.com
 Tags: form, login, registration, editor, lost password, responsive, wpml, internationalization, languages, role, CAPTCHA, honeypot, shortcode, wordpress, frontend
 Requires at least: 3.4
 Tested up to: 4.2
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -73,6 +73,9 @@ Please, refer to [Installation section](https://wordpress.org/plugins/clean-logi
 12. WPML. Certificate of Compatibility
 
 == Changelog ==
+
+= 1.2.4 =
+*   FAQ section included.
 
 = 1.2.3 =
 *   French language updated. Thanks to Alain Sole
@@ -172,7 +175,8 @@ Please, refer to [Installation section](https://wordpress.org/plugins/clean-logi
 
 == Frequently Asked Questions ==
 
-*   Not yet
+*   ¿Can I use my email in addition to your username for login? Yes, through [WP Email Login](https://wordpress.org/plugins/wp-email-login/).
+*	¿Can I modify my Avatar? Clean Login uses your email to get your Avatar from the Gravatar service (from Automattic), but if you want to modify from the WordPress dashboard you can use [WP User Avatar](https://wordpress.org/plugins/wp-user-avatar/).
 
 == Installation ==
 
