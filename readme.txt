@@ -181,8 +181,9 @@ Please, refer to [Installation section](https://wordpress.org/plugins/clean-logi
 
 == Frequently Asked Questions ==
 
-*   ¿Can I use my email in addition to your username for login? Yes, through [WP Email Login](https://wordpress.org/plugins/wp-email-login/).
-*	¿Can I modify my Avatar? Clean Login uses your email to get your Avatar from the Gravatar service (from Automattic), but if you want to modify from the WordPress dashboard you can use [WP User Avatar](https://wordpress.org/plugins/wp-user-avatar/).
+*   Can I use my email in addition to your username for login? Yes, through [WP Email Login](https://wordpress.org/plugins/wp-email-login/).
+*   Can I modify my Avatar? Clean Login uses your email to get your Avatar from the Gravatar service (from Automattic), but if you want to modify from the WordPress dashboard you can use [WP User Avatar](https://wordpress.org/plugins/wp-user-avatar/).
+*   Is Clean Login compatible with AJAX-based plugins/themes/queries? Yes, from the version 1.2.6.
 
 == Installation ==
 
