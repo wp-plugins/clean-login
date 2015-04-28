@@ -4,7 +4,7 @@ Donate link: http://codection.com
 Tags: form, login, registration, editor, lost password, responsive, wpml, internationalization, languages, role, CAPTCHA, honeypot, shortcode, wordpress, frontend
 Requires at least: 3.4
 Tested up to: 4.2
-Stable tag: 1.2.6
+Stable tag: 1.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -73,6 +73,9 @@ Please, refer to [Installation section](https://wordpress.org/plugins/clean-logi
 12. WPML. Certificate of Compatibility
 
 == Changelog ==
+
+= 1.2.7 =
+*   Bug fixed 'Notice: Use of undefined constant DOING_AJAX'
 
 = 1.2.6 =
 *   Bug fixed in AJAX queries. Thanks again to Роман Перевала for reporting

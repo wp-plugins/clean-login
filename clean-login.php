@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Clean_Login
- * @version 1.2.6
+ * @version 1.2.7
  */
 /*
 Plugin Name: Clean Login
 Plugin URI: http://cleanlogin.codection.com
 Description: Responsive Frontend Login and Registration plugin. A plugin for displaying login, register, editor and restore password forms through shortcodes. [clean-login] [clean-login-edit] [clean-login-register] [clean-login-restore]
 Author: codection
-Version: 1.2.6
+Version: 1.2.7
 Author URI: https://codection.com
 */
 
@@ -483,12 +483,12 @@ add_action('after_setup_theme', 'clean_login_remove_admin_bar');
 function clean_login_block_dashboard_access() {
 	$block_dashboard = get_option( 'cl_dashboard' ) == 'on' ? true : false;
 
-	if ( $block_dashboard && !current_user_can('manage_options') && !defined('DOING_AJAX') && !DOING_AJAX ) {
+	if ( $block_dashboard && !current_user_can( 'manage_options' ) && ( !defined( 'DOING_AJAX' ) || !DOING_AJAX ) ) {
 		wp_redirect( home_url() );
 		exit;
 	}
 }
-add_action( 'init', 'clean_login_block_dashboard_access' );
+add_action( 'admin_init', 'clean_login_block_dashboard_access', 1 );
 
 /**
  * session_start();
