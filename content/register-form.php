@@ -31,6 +31,20 @@
 				</div>
 			<?php endif; ?>
 
+			<?php /*check if custom roles is checked */ if ( get_option( 'cl_chooserole' ) == 'on' ) : ?>
+				<div class="cleanlogin-field" <?php if ( get_option( 'cl_antispam' ) == 'on' ) echo 'style="margin-top: 46px;"'; ?> >
+					<span><?php echo __( 'Choose your role:', 'cleanlogin' ); ?></span>
+					<select name="role" id="role">
+						<?php
+						$newuserroles = get_option ( 'cl_newuserroles' );
+						global $wp_roles;
+						foreach($newuserroles as $role){
+							echo '<option value="'.$role.'">'. translate_user_role( $wp_roles->roles[ $role ]['name'] ) .'</option>';
+						}
+						?>
+					</select>
+				</div>
+			<?php endif; ?>
 
 		</fieldset>
 

@@ -90,6 +90,18 @@ to your current WordPress template, and if something behaves abnormal please con
 	width: 100%;
 }
 
+.cleanlogin-form select {
+	color: #7c7c7c;
+	width: 100%;
+	height: 36px;
+	-webkit-appearance: menulist-button;
+}
+
+.cleanlogin-form span {
+	color: #7c7c7c;
+	margin-left: 8px;
+}
+
 .cleanlogin-form button,
 .cleanlogin-form input,
 .cleanlogin-form select,

@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Clean_Login
- * @version 1.2.7
+ * @version 1.3
  */
 /*
 Plugin Name: Clean Login
 Plugin URI: http://cleanlogin.codection.com
 Description: Responsive Frontend Login and Registration plugin. A plugin for displaying login, register, editor and restore password forms through shortcodes. [clean-login] [clean-login-edit] [clean-login-register] [clean-login-restore]
 Author: codection
-Version: 1.2.7
+Version: 1.3
 Author URI: https://codection.com
 */
 
@@ -257,12 +257,10 @@ function clean_login_load_before_headers() {
 					$userdata['user_email'] = $email;
 				}
 
-
 				// check if password complexity is checked
 				$enable_passcomplex = get_option( 'cl_passcomplex' ) == 'on' ? true : false;
 
-				// password complexity checker
-				
+				// password checker
 				if ( isset( $_POST['pass1'] ) && ! empty( $_POST['pass1'] ) ) {
 					if ( ! isset( $_POST['pass2'] ) || ( isset( $_POST['pass2'] ) && $_POST['pass2'] != $_POST['pass1'] ) ) {
 						$url = add_query_arg( 'updated', 'wrongpass', $url );
@@ -295,15 +293,27 @@ function clean_login_load_before_headers() {
 				$website = isset( $_POST['website'] ) ? $_POST['website'] : '';
 				$captcha = isset( $_POST['captcha'] ) ? $_POST['captcha'] : '';
 				$captcha_session = isset( $_SESSION['cleanlogin-captcha'] ) ? $_SESSION['cleanlogin-captcha'] : '';
+				$role = isset( $_POST['role'] ) ? $_POST['role'] : '';
 
 				// check if captcha is checked
 				$enable_captcha = get_option( 'cl_antispam' ) == 'on' ? true : false;
+				// check if standby role is checked
+				$create_standby_role = get_option( 'cl_standby' ) == 'on' ? true : false;
 				// check if password complexity is checked
 				$enable_passcomplex = get_option( 'cl_passcomplex' ) == 'on' ? true : false;
+				// check if custom role is selected and get the roles choosen
+				$create_customrole = get_option( 'cl_chooserole' ) == 'on' ? true : false;
+				$newuserroles = get_option ( 'cl_newuserroles' );
+				// check if the user should receive an email
+				$emailnotification = get_option ( 'cl_emailnotification' );
+    			$emailnotificationcontent = get_option ( 'cl_emailnotificationcontent' );
 
 				// password complexity checker
 				if( $enable_passcomplex && !is_password_complex($pass1) )
 					$url = add_query_arg( 'created', 'passcomplex', $url );
+				// check if the selected role is contained in the roles selected in CL
+				else if ( $create_customrole && !in_array($role, $newuserroles))
+					$url = add_query_arg( 'created', 'failed', $url );
 				// captcha enabled
 				else if( $enable_captcha && $captcha != $captcha_session )
 					$url = add_query_arg( 'created', 'wrongcaptcha', $url );
@@ -316,6 +326,7 @@ function clean_login_load_before_headers() {
 					$url = add_query_arg( 'created', 'wrongmail', $url );
 				else if ( $pass1 == '' || $pass1 != $pass2)
 					$url = add_query_arg( 'created', 'wrongpass', $url );
+
 				/*else if( $pass != "4523" )
 					$url = add_query_arg( 'created', 'wrongpassphrase', $url );*/
 				else {
@@ -323,12 +334,11 @@ function clean_login_load_before_headers() {
 					if ( is_wp_error( $user_id ) )
 						$url = add_query_arg( 'created', 'failed', $url );
 					else {
-						$create_standby_role = get_option( 'cl_standby' ) == 'on' ? true : false;
-
-						if ( $create_standby_role ) {
-							$user = new WP_User( $user_id );
+						$user = new WP_User( $user_id );
+						if( $create_customrole )
+							$user->set_role( $role );
+						else if ( $create_standby_role )
 							$user->set_role( 'standby' );
-						}
 						
 						$adminemail = get_bloginfo( 'admin_email' );
 						$blog_title = get_bloginfo();
@@ -337,11 +347,18 @@ function clean_login_load_before_headers() {
 						else
 							$message = sprintf( __( "New user registered: %s <br/>", 'cleanlogin' ), $username );
 						
+						$subject = "[$blog_title] " . __( 'New user', 'cleanlogin' );
 						add_filter( 'wp_mail_content_type', 'clean_login_set_html_content_type' );
-						if( !wp_mail( $adminemail, "[$blog_title] New user" , $message ) )
+						if( !wp_mail( $adminemail, $subject, $message ) )
 							$url = add_query_arg( 'sent', 'failed', $url );
 						remove_filter( 'wp_mail_content_type', 'clean_login_set_html_content_type' );
 
+						if( $emailnotification ) {
+							add_filter( 'wp_mail_content_type', 'clean_login_set_html_content_type' );
+							if( !wp_mail( $email, $subject , $emailnotificationcontent ) )
+								$url = add_query_arg( 'sent', 'failed', $url );
+							remove_filter( 'wp_mail_content_type', 'clean_login_set_html_content_type' );
+						}
 					}
 				}
 
@@ -379,8 +396,9 @@ function clean_login_load_before_headers() {
 					$blog_title = get_bloginfo();
 					$message = sprintf( __( "Use the following link to restore your password: <a href='%s'>restore your password</a> <br/><br/>%s<br/>", 'cleanlogin' ), $url_msg, $blog_title );
 
+					$subject = "[$blog_title] " . __( 'Restore your password', 'cleanlogin' );
 					add_filter( 'wp_mail_content_type', 'clean_login_set_html_content_type' );
-					if( !wp_mail( $email, "[$blog_title] Restore your password" , $message ) )
+					if( !wp_mail( $email, $subject , $message ) )
 						$url = add_query_arg( 'sent', 'failed', $url );
 					remove_filter( 'wp_mail_content_type', 'clean_login_set_html_content_type' );
 
@@ -664,9 +682,12 @@ function clean_login_options() {
         update_option( 'cl_standby', isset( $_POST['standby'] ) ? $_POST['standby'] : '' );
         update_option( 'cl_hideuser', isset( $_POST['hideuser'] ) ? $_POST['hideuser'] : '' );
         update_option( 'cl_passcomplex', isset( $_POST['passcomplex'] ) ? $_POST['passcomplex'] : '' );
-        
+        update_option( 'cl_emailnotification', isset( $_POST['emailnotification'] ) ? $_POST['emailnotification'] : '' );
+        update_option( 'cl_emailnotificationcontent', isset( $_POST['emailnotificationcontent'] ) ? $_POST['emailnotificationcontent'] : '' );
+        update_option( 'cl_chooserole', isset( $_POST['chooserole'] ) ? $_POST['chooserole'] : '' );
+        update_option( 'cl_newuserroles', isset( $_POST['newuserroles'] ) ? $_POST['newuserroles'] : '' );
 
-		
+        
 		echo '<div class="updated"><p><strong>'. __( 'Settings saved.', 'cleanlogin' ) .'</strong></p></div>';
     }
 
@@ -677,6 +698,10 @@ function clean_login_options() {
     $standby = get_option( 'cl_standby' );
     $hideuser = get_option ( 'cl_hideuser' );
     $passcomplex = get_option ( 'cl_passcomplex' );
+    $emailnotification = get_option ( 'cl_emailnotification' );
+    $emailnotificationcontent = get_option ( 'cl_emailnotificationcontent' );
+    $chooserole = get_option ( 'cl_chooserole' );
+    $newuserroles = get_option ( 'cl_newuserroles' );
 
     ?>
     	<form name="form1" method="post" action="">
@@ -704,10 +729,16 @@ function clean_login_options() {
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><?php echo __( 'User Standby role', 'cleanlogin' ); ?></th>
+					<th scope="row"><?php echo __( 'User role', 'cleanlogin' ); ?></th>
 					<td>
 						<label><input name="standby" type="checkbox" id="standby" <?php if( $standby == 'on' ) echo 'checked="checked"'; ?>><?php echo __( 'Enable Standby role?', 'cleanlogin' ); ?></label>
 						<p class="description"><?php echo __( 'Standby role disables all the capabilities for new users, until the administrator changes. It usefull for site with restricted components.', 'cleanlogin' ); ?></p>
+						<br>
+						<label><input name="chooserole" type="checkbox" id="chooserole" <?php if( $chooserole == 'on' ) echo 'checked="checked"'; ?>><?php echo __( 'Choose the role(s) in the registration form?', 'cleanlogin' ); ?></label>
+						<p>
+							<select name="newuserroles[]" id="newuserroles" multiple size="5"><?php wp_dropdown_roles(); ?></select>
+							<?php //print_r($newuserroles); ?>
+						</p>
 					</td>
 				</tr>
 				<tr>
@@ -724,6 +755,13 @@ function clean_login_options() {
 						<p class="description"><?php echo __( 'Passwords must be eight characters including one upper/lowercase letter, one special/symbol character and alphanumeric characters. Passwords should not contain the user\'s username, email, or first/last name.', 'cleanlogin' ); ?></p>
 					</td>
 				</tr>
+				<tr>
+					<th scope="row"><?php echo __( 'Email notification', 'cleanlogin' ); ?></th>
+					<td>
+						<label><input name="emailnotification" type="checkbox" id="emailnotification" <?php if( $emailnotification == 'on' ) echo 'checked="checked"'; ?>><?php echo __( 'Enable email notification for new registered users?', 'cleanlogin' ); ?></label>
+						<p><textarea name="emailnotificationcontent" id="emailnotificationcontent" placeholder="<?php echo __( 'Please use html tags for all formatting', 'cleanlogin' ); ?>" rows="8" cols="50" class="large-text code"><?php echo $emailnotificationcontent; ?></textarea></p>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 		<input type="hidden" name="<?php echo $hidden_field_name; ?>" value="<?php echo $hidden_field_value; ?>">
@@ -731,6 +769,48 @@ function clean_login_options() {
 	    <p class="submit"><input type="submit" name="Submit" class="button-primary" value="<?php echo __( 'Save Changes', 'cleanlogin' ); ?>" /></p>
         </form>
     </div>
+    <script>
+    jQuery(document).ready(function( $ ) {
+
+    	var selected_roles = <?php echo json_encode($newuserroles); ?>;
+    	$('select#newuserroles').find('option').each(function() {
+    		//alert(jQuery.inArray($(this).val(), selected_roles));
+		    if( jQuery.inArray($(this).val(), selected_roles) < 0 )
+		    	$(this).attr('selected', false);
+		    else
+		    	$(this).attr('selected', true);
+		});
+
+    	if ($('#chooserole').is(':checked')) {
+            $('#newuserroles').show();
+        } else {
+        	$('#newuserroles').hide();
+        }
+
+    	$('#chooserole').click(function() {
+	        if ($(this).is(':checked')) {
+	            $('#newuserroles').show();
+	        } else {
+	        	$('#newuserroles').hide();
+	        }
+	    });
+
+		if ($('#emailnotification').is(':checked')) {
+            $('#emailnotificationcontent').show();
+        } else {
+        	$('#emailnotificationcontent').hide();
+        }
+
+	    $('#emailnotification').click(function() {
+	        if ($(this).is(':checked')) {
+	            $('#emailnotificationcontent').show();
+	        } else {
+	        	$('#emailnotificationcontent').hide();
+	        }
+	    });
+
+	});
+    </script>
 	<?php
 }
 
@@ -784,6 +864,10 @@ class clean_login_widget extends WP_Widget {
 
 			if ( $edit_url != '' )
 				echo "<ul><li><a href='$edit_url'>". __( 'Edit my profile', 'cleanlogin') ."</a></li></ul>";
+
+			if ( $login_url != '' )
+				echo "<ul><li><a href='$login_url?action=logout'>". __( 'Logout', 'cleanlogin') ."</a></li></ul>";
+
 
 		} else {
 			echo "<ul>";
