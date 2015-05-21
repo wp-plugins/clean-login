@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Clean_Login
- * @version 1.3
+ * @version 1.4
  */
 /*
 Plugin Name: Clean Login
 Plugin URI: http://cleanlogin.codection.com
 Description: Responsive Frontend Login and Registration plugin. A plugin for displaying login, register, editor and restore password forms through shortcodes. [clean-login] [clean-login-edit] [clean-login-register] [clean-login-restore]
 Author: codection
-Version: 1.3
+Version: 1.4
 Author URI: https://codection.com
 */
 
@@ -99,6 +99,10 @@ add_shortcode('clean-login-edit', 'show_clean_login_edit');
  */
 function show_clean_login_register($atts) {
 	
+	$param = shortcode_atts( array(
+        'role' => false,
+    ), $atts );
+
 	ob_start();
 
 	if ( isset( $_GET['created'] ) ) {
@@ -221,22 +225,22 @@ function clean_login_load_before_headers() {
 					$url = $login_url;
 				$user = wp_signon();
 				if ( is_wp_error( $user ) )
-					$url = add_query_arg( 'authentication', 'failed', $url );
+					$url = esc_url( add_query_arg( 'authentication', 'failed', $url ) );
 				else
-					$url = add_query_arg( 'authentication', 'success', $url );
+					$url = esc_url( add_query_arg( 'authentication', 'success', $url ) );
 
 				wp_safe_redirect( $url );
 
 			// LOGOUT
 			} else if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'logout' ) {
 				wp_logout();
-				$url = add_query_arg( 'authentication', 'logout', $url );
+				$url = esc_url( add_query_arg( 'authentication', 'logout', $url ) );
 				
 				wp_safe_redirect( $url );
 
 			// EDIT profile
 			} else if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'edit' ) {
-				$url = add_query_arg( 'updated', 'success', $url );
+				$url = esc_url( add_query_arg( 'updated', 'success', $url ) );
 
 				$current_user = wp_get_current_user();
 				$userdata = array( 'ID' => $current_user->ID );
@@ -248,11 +252,11 @@ function clean_login_load_before_headers() {
 			
 				$email = isset( $_POST['email'] ) ? $_POST['email'] : '';
 				if ( ! $email || empty ( $email ) ) {
-					$url = add_query_arg( 'updated', 'wrongmail', $url );
+					$url = esc_url( add_query_arg( 'updated', 'wrongmail', $url ) );
 				} elseif ( ! is_email( $email ) ) {
-					$url = add_query_arg( 'updated', 'wrongmail', $url );
+					$url = esc_url( add_query_arg( 'updated', 'wrongmail', $url ) );
 				} elseif ( ( $email != $current_user->user_email ) && email_exists( $email ) ) {
-					$url = add_query_arg( 'updated', 'wrongmail', $url );
+					$url = esc_url( add_query_arg( 'updated', 'wrongmail', $url ) );
 				} else {
 					$userdata['user_email'] = $email;
 				}
@@ -263,11 +267,11 @@ function clean_login_load_before_headers() {
 				// password checker
 				if ( isset( $_POST['pass1'] ) && ! empty( $_POST['pass1'] ) ) {
 					if ( ! isset( $_POST['pass2'] ) || ( isset( $_POST['pass2'] ) && $_POST['pass2'] != $_POST['pass1'] ) ) {
-						$url = add_query_arg( 'updated', 'wrongpass', $url );
+						$url = esc_url( add_query_arg( 'updated', 'wrongpass', $url ) );
 					}
 					else {
 						if( $enable_passcomplex && !is_password_complex($_POST['pass1']) )
-							$url = add_query_arg( 'updated', 'passcomplex', $url );
+							$url = esc_url( add_query_arg( 'updated', 'passcomplex', $url ) );
 						else
 							$userdata['user_pass'] = $_POST['pass1'];
 					}
@@ -276,20 +280,19 @@ function clean_login_load_before_headers() {
 
 				$user_id = wp_update_user( $userdata );
 				if ( is_wp_error( $user_id ) ) {
-					$url = add_query_arg( 'updated', 'failed', $url );
+					$url = esc_url( add_query_arg( 'updated', 'failed', $url ) );
 				}
 
 				wp_safe_redirect( $url );
 
 			// REGISTER a new user
 			} else if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'register' ) {
-				$url = add_query_arg( 'created', 'success', $url );
+				$url = esc_url( add_query_arg( 'created', 'success', $url ) );
 
 				$username = isset( $_POST['username'] ) ? $_POST['username'] : '';
 				$email = isset( $_POST['email'] ) ? $_POST['email'] : '';
 				$pass1 = isset( $_POST['pass1'] ) ? $_POST['pass1'] : '';
 				$pass2 = isset( $_POST['pass2'] ) ? $_POST['pass2'] : '';
-				$pass = isset( $_POST['pass'] ) ? $_POST['pass'] : '';
 				$website = isset( $_POST['website'] ) ? $_POST['website'] : '';
 				$captcha = isset( $_POST['captcha'] ) ? $_POST['captcha'] : '';
 				$captcha_session = isset( $_SESSION['cleanlogin-captcha'] ) ? $_SESSION['cleanlogin-captcha'] : '';
@@ -310,29 +313,26 @@ function clean_login_load_before_headers() {
 
 				// password complexity checker
 				if( $enable_passcomplex && !is_password_complex($pass1) )
-					$url = add_query_arg( 'created', 'passcomplex', $url );
+					$url = esc_url( add_query_arg( 'created', 'passcomplex', $url ) );
 				// check if the selected role is contained in the roles selected in CL
 				else if ( $create_customrole && !in_array($role, $newuserroles))
-					$url = add_query_arg( 'created', 'failed', $url );
+					$url = esc_url( add_query_arg( 'created', 'failed', $url ) );
 				// captcha enabled
 				else if( $enable_captcha && $captcha != $captcha_session )
-					$url = add_query_arg( 'created', 'wrongcaptcha', $url );
+					$url = esc_url( add_query_arg( 'created', 'wrongcaptcha', $url ) );
 				// honeypot detection
 				else if( $website != ' ' )
-					$url = add_query_arg( 'created', 'created', $url );
+					$url = esc_url( add_query_arg( 'created', 'created', $url ) );
 				else if( $username == '' || username_exists( $username ) )
-					$url = add_query_arg( 'created', 'wronguser', $url );
+					$url = esc_url( add_query_arg( 'created', 'wronguser', $url ) );
 				else if( $email == '' || email_exists( $email ) || !is_email( $email ) )
-					$url = add_query_arg( 'created', 'wrongmail', $url );
+					$url = esc_url( add_query_arg( 'created', 'wrongmail', $url ) );
 				else if ( $pass1 == '' || $pass1 != $pass2)
-					$url = add_query_arg( 'created', 'wrongpass', $url );
-
-				/*else if( $pass != "4523" )
-					$url = add_query_arg( 'created', 'wrongpassphrase', $url );*/
+					$url = esc_url( add_query_arg( 'created', 'wrongpass', $url ) );
 				else {
 					$user_id = wp_create_user( $username, $pass1, $email );
 					if ( is_wp_error( $user_id ) )
-						$url = add_query_arg( 'created', 'failed', $url );
+						$url = esc_url( add_query_arg( 'created', 'failed', $url ) );
 					else {
 						$user = new WP_User( $user_id );
 						if( $create_customrole )
@@ -350,13 +350,17 @@ function clean_login_load_before_headers() {
 						$subject = "[$blog_title] " . __( 'New user', 'cleanlogin' );
 						add_filter( 'wp_mail_content_type', 'clean_login_set_html_content_type' );
 						if( !wp_mail( $adminemail, $subject, $message ) )
-							$url = add_query_arg( 'sent', 'failed', $url );
+							$url = esc_url( add_query_arg( 'sent', 'failed', $url ) );
 						remove_filter( 'wp_mail_content_type', 'clean_login_set_html_content_type' );
 
 						if( $emailnotification ) {
+							$emailnotificationcontent = str_replace("{username}", $username, $emailnotificationcontent);
+							$emailnotificationcontent = str_replace("{password}", $pass1, $emailnotificationcontent);
+							$emailnotificationcontent = str_replace("{email}", $email, $emailnotificationcontent);
+							
 							add_filter( 'wp_mail_content_type', 'clean_login_set_html_content_type' );
 							if( !wp_mail( $email, $subject , $emailnotificationcontent ) )
-								$url = add_query_arg( 'sent', 'failed', $url );
+								$url = esc_url( add_query_arg( 'sent', 'failed', $url ) );
 							remove_filter( 'wp_mail_content_type', 'clean_login_set_html_content_type' );
 						}
 					}
@@ -366,7 +370,7 @@ function clean_login_load_before_headers() {
 
 			// RESTORE a password by sending an email with the activation link
 			} else if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'restore' ) {
-				$url = add_query_arg( 'sent', 'success', $url );
+				$url = esc_url( add_query_arg( 'sent', 'success', $url ) );
 
 				$username = isset( $_POST['username'] ) ? $_POST['username'] : '';
 				$website = isset( $_POST['website'] ) ? $_POST['website'] : '';
@@ -382,14 +386,14 @@ function clean_login_load_before_headers() {
 
 				// honeypot detection
 				if( $website != ' ' )
-					$url = add_query_arg( 'sent', 'sent', $url );
+					$url = esc_url( add_query_arg( 'sent', 'sent', $url ) );
 				else if( $username == '' || !username_exists( $username ) )
-					$url = add_query_arg( 'sent', 'wronguser', $url );
+					$url = esc_url( add_query_arg( 'sent', 'wronguser', $url ) );
 				else {
 					$user = get_user_by( 'login', $username );
 
 					$url_msg = get_permalink();
-					$url_msg = add_query_arg( 'restore', $user->ID, $url_msg );
+					$url_msg = esc_url( add_query_arg( 'restore', $user->ID, $url_msg ) );
 					$url_msg = wp_nonce_url( $url_msg, $user->ID );
 
 					$email = $user->user_email;
@@ -399,7 +403,7 @@ function clean_login_load_before_headers() {
 					$subject = "[$blog_title] " . __( 'Restore your password', 'cleanlogin' );
 					add_filter( 'wp_mail_content_type', 'clean_login_set_html_content_type' );
 					if( !wp_mail( $email, $subject , $message ) )
-						$url = add_query_arg( 'sent', 'failed', $url );
+						$url = esc_url( add_query_arg( 'sent', 'failed', $url ) );
 					remove_filter( 'wp_mail_content_type', 'clean_login_set_html_content_type' );
 
 				}
@@ -439,9 +443,9 @@ function clean_login_load_before_headers() {
 					$user_id = wp_update_user( array( 'ID' => $user_id, 'user_pass' => $new_password ) );
 
 					if ( is_wp_error( $user_id ) ) {
-						$url = add_query_arg( 'sent', 'wronguser', $url );
+						$url = esc_url( add_query_arg( 'sent', 'wronguser', $url ) );
 					} else {
-						$url = add_query_arg( 'pass', $new_password, $url );
+						$url = esc_url( add_query_arg( 'pass', $new_password, $url ) );
 					}
 				}
 
@@ -466,7 +470,7 @@ function clean_login_url_cleaner( $url ) {
 		'sent',
 		'restore'
 	);
-	return remove_query_arg( $query_args, $url );
+	return esc_url( remove_query_arg( $query_args, $url ) );
 }
 
 /**
@@ -735,6 +739,7 @@ function clean_login_options() {
 						<p class="description"><?php echo __( 'Standby role disables all the capabilities for new users, until the administrator changes. It usefull for site with restricted components.', 'cleanlogin' ); ?></p>
 						<br>
 						<label><input name="chooserole" type="checkbox" id="chooserole" <?php if( $chooserole == 'on' ) echo 'checked="checked"'; ?>><?php echo __( 'Choose the role(s) in the registration form?', 'cleanlogin' ); ?></label>
+						<p class="description"><?php echo __( 'This feature allows you to choose the role from the frontend, with the selected roles you want to show. You can also define an standard predefined role through a shortcode parameter, e.g. [clean-login-register role="contributor"]. Anyway, you need to choose only the role(s) you want to accept to avoid security/infiltration issues.', 'cleanlogin' ); ?></p>
 						<p>
 							<select name="newuserroles[]" id="newuserroles" multiple size="5"><?php wp_dropdown_roles(); ?></select>
 							<?php //print_r($newuserroles); ?>
@@ -759,7 +764,7 @@ function clean_login_options() {
 					<th scope="row"><?php echo __( 'Email notification', 'cleanlogin' ); ?></th>
 					<td>
 						<label><input name="emailnotification" type="checkbox" id="emailnotification" <?php if( $emailnotification == 'on' ) echo 'checked="checked"'; ?>><?php echo __( 'Enable email notification for new registered users?', 'cleanlogin' ); ?></label>
-						<p><textarea name="emailnotificationcontent" id="emailnotificationcontent" placeholder="<?php echo __( 'Please use html tags for all formatting', 'cleanlogin' ); ?>" rows="8" cols="50" class="large-text code"><?php echo $emailnotificationcontent; ?></textarea></p>
+						<p><textarea name="emailnotificationcontent" id="emailnotificationcontent" placeholder="<?php echo __( 'Please use HMTL tags for all formatting. And also you can use:', 'cleanlogin' ) . ' {username} {password} {email}'; ?>" rows="8" cols="50" class="large-text code"><?php echo $emailnotificationcontent; ?></textarea></p>
 					</td>
 				</tr>
 			</tbody>

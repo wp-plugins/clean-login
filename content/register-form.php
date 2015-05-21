@@ -32,7 +32,10 @@
 			<?php endif; ?>
 
 			<?php /*check if custom roles is checked */ if ( get_option( 'cl_chooserole' ) == 'on' ) : ?>
-				<div class="cleanlogin-field" <?php if ( get_option( 'cl_antispam' ) == 'on' ) echo 'style="margin-top: 46px;"'; ?> >
+				<?php if ($param['role']) : ?>
+				<input type="text" name="role" value="<?php echo $param['role']; ?>" hidden >
+				<?php else : ?> 
+				<div class="cleanlogin-field cleanlogin-field-role" <?php if ( get_option( 'cl_antispam' ) == 'on' ) echo 'style="margin-top: 46px;"'; ?> >
 					<span><?php echo __( 'Choose your role:', 'cleanlogin' ); ?></span>
 					<select name="role" id="role">
 						<?php
@@ -44,6 +47,7 @@
 						?>
 					</select>
 				</div>
+				<?php endif; ?>
 			<?php endif; ?>
 
 		</fieldset>
