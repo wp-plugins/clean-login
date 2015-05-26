@@ -3,8 +3,8 @@ Contributors: hornero, carazo
 Donate link: http://codection.com
 Tags: form, login, registration, editor, lost password, responsive, wpml, internationalization, languages, role, CAPTCHA, honeypot, shortcode, wordpress, frontend
 Requires at least: 3.4
-Tested up to: 4.2
-Stable tag: 1.4
+Tested up to: 4.2.2
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,8 +28,8 @@ Responsive Frontend Login and Registration plugin. A plugin for displaying login
 
 ### Style
 
-*   Every form created is Responsive
-*   CSS adapted to every theme
+*   Every form created is responsive
+*   CSS adapted to each theme
 
 ### Spam protection
 
@@ -73,6 +73,11 @@ Please, refer to [Installation section](https://wordpress.org/plugins/clean-logi
 12. WPML. Certificate of Compatibility
 
 == Changelog ==
+
+= 1.4.1 =
+*   Swedish language included. Thanks to Didrik Holstensson Kvist
+*   Tested on 4.2.2
+*   Bug fixed 'query_arg not sanitized at login form'. Thanks to KTS915.
 
 = 1.4 =
 *   Spanish translation updated
