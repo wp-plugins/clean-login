@@ -50,6 +50,15 @@
 				<?php endif; ?>
 			<?php endif; ?>
 
+			<?php /*check if termsconditions is checked */ if ( get_option( 'cl_termsconditions' ) == 'on' ) : ?>
+				<div class="cleanlogin-field">
+					<label class="cleanlogin-terms">
+						<input name="termsconditions" type="checkbox" id="termsconditions">
+						<?php echo get_option( 'cl_termsconditionsMSG' ); ?>
+					</label>
+				</div>
+			<?php endif; ?>
+
 		</fieldset>
 
 		<div>	

@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Clean_Login
- * @version 1.4.1
+ * @version 1.5
  */
 /*
 Plugin Name: Clean Login
 Plugin URI: http://cleanlogin.codection.com
 Description: Responsive Frontend Login and Registration plugin. A plugin for displaying login, register, editor and restore password forms through shortcodes. [clean-login] [clean-login-edit] [clean-login-register] [clean-login-restore]
 Author: codection
-Version: 1.4.1
+Version: 1.5
 Author URI: https://codection.com
 */
 
@@ -122,6 +122,8 @@ function show_clean_login_register($atts) {
 			echo "<div class='cleanlogin-notification error'><p>". __( 'CAPTCHA is not valid, please try again', 'cleanlogin' ) ."</p></div>";
 		else if ( $_GET['created'] == 'failed' )
 			echo "<div class='cleanlogin-notification error'><p>". __( 'Something strange has ocurred while created the new user', 'cleanlogin' ) ."</p></div>";
+		else if ( $_GET['created'] == 'terms' )
+			echo "<div class='cleanlogin-notification error'><p>\"". get_option ( 'cl_termsconditionsMSG' ) . '" ' .__( 'must be checked', 'cleanlogin' ) . "</p></div>";
 	}
 
 	if ( !is_user_logged_in() ) {
@@ -297,6 +299,7 @@ function clean_login_load_before_headers() {
 				$captcha = isset( $_POST['captcha'] ) ? $_POST['captcha'] : '';
 				$captcha_session = isset( $_SESSION['cleanlogin-captcha'] ) ? $_SESSION['cleanlogin-captcha'] : '';
 				$role = isset( $_POST['role'] ) ? $_POST['role'] : '';
+				$terms = isset( $_POST['termsconditions'] ) && $_POST['termsconditions'] == 'on' ? true : false;
 
 				// check if captcha is checked
 				$enable_captcha = get_option( 'cl_antispam' ) == 'on' ? true : false;
@@ -310,9 +313,14 @@ function clean_login_load_before_headers() {
 				// check if the user should receive an email
 				$emailnotification = get_option ( 'cl_emailnotification' );
     			$emailnotificationcontent = get_option ( 'cl_emailnotificationcontent' );
-
+    			// check if termsconditions is checked
+    			$termsconditions = get_option( 'cl_termsconditions' ) == 'on' ? true : false;
+				
+				// terms and conditions
+				if( $termsconditions && !$terms )
+					$url = esc_url( add_query_arg( 'created', 'terms', $url ) );
 				// password complexity checker
-				if( $enable_passcomplex && !is_password_complex($pass1) )
+				else if( $enable_passcomplex && !is_password_complex($pass1) )
 					$url = esc_url( add_query_arg( 'created', 'passcomplex', $url ) );
 				// check if the selected role is contained in the roles selected in CL
 				else if ( $create_customrole && !in_array($role, $newuserroles))
@@ -690,7 +698,9 @@ function clean_login_options() {
         update_option( 'cl_emailnotificationcontent', isset( $_POST['emailnotificationcontent'] ) ? $_POST['emailnotificationcontent'] : '' );
         update_option( 'cl_chooserole', isset( $_POST['chooserole'] ) ? $_POST['chooserole'] : '' );
         update_option( 'cl_newuserroles', isset( $_POST['newuserroles'] ) ? $_POST['newuserroles'] : '' );
-
+        update_option( 'cl_termsconditions', isset( $_POST['termsconditions'] ) ? $_POST['termsconditions'] : '' );
+        update_option( 'cl_termsconditionsMSG', isset( $_POST['termsconditionsMSG'] ) ? $_POST['termsconditionsMSG'] : '' );
+        update_option( 'cl_termsconditionsURL', isset( $_POST['termsconditionsURL'] ) ? $_POST['termsconditionsURL'] : '' );
         
 		echo '<div class="updated"><p><strong>'. __( 'Settings saved.', 'cleanlogin' ) .'</strong></p></div>';
     }
@@ -706,6 +716,9 @@ function clean_login_options() {
     $emailnotificationcontent = get_option ( 'cl_emailnotificationcontent' );
     $chooserole = get_option ( 'cl_chooserole' );
     $newuserroles = get_option ( 'cl_newuserroles' );
+    $termsconditions = get_option ( 'cl_termsconditions' );
+    $termsconditionsMSG = get_option ( 'cl_termsconditionsMSG' );
+    $termsconditionsURL = get_option ( 'cl_termsconditionsURL' );
 
     ?>
     	<form name="form1" method="post" action="">
@@ -767,6 +780,14 @@ function clean_login_options() {
 						<p><textarea name="emailnotificationcontent" id="emailnotificationcontent" placeholder="<?php echo __( 'Please use HMTL tags for all formatting. And also you can use:', 'cleanlogin' ) . ' {username} {password} {email}'; ?>" rows="8" cols="50" class="large-text code"><?php echo $emailnotificationcontent; ?></textarea></p>
 					</td>
 				</tr>
+				<tr>
+					<th scope="row"><?php echo __( 'Terms and conditions', 'cleanlogin' ); ?></th>
+					<td>
+						<label><input name="termsconditions" type="checkbox" id="termsconditions" <?php if( $termsconditions == 'on' ) echo 'checked="checked"'; ?>><?php echo __( 'Accept terms / conditions in the registration form?', 'cleanlogin' ); ?></label>
+						<p><input name="termsconditionsMSG" type="text" id="termsconditionsMSG" value="<?php echo $termsconditionsMSG; ?>" placeholder="<?php echo __( 'Terms and conditions message', 'cleanlogin' ); ?>" class="regular-text"></p>
+						<p><input name="termsconditionsURL" type="url" id="termsconditionsURL" value="<?php echo $termsconditionsURL; ?>" placeholder="<?php echo __( 'Target URL', 'cleanlogin' ); ?>" class="regular-text"></p>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 		<input type="hidden" name="<?php echo $hidden_field_name; ?>" value="<?php echo $hidden_field_value; ?>">
@@ -811,6 +832,24 @@ function clean_login_options() {
 	            $('#emailnotificationcontent').show();
 	        } else {
 	        	$('#emailnotificationcontent').hide();
+	        }
+	    });
+
+	    if ($('#termsconditions').is(':checked')) {
+            $('#termsconditionsMSG').show();
+            $('#termsconditionsURL').show();
+        } else {
+        	$('#termsconditionsMSG').hide();
+        	$('#termsconditionsURL').hide();
+        }
+
+    	$('#termsconditions').click(function() {
+	        if ($(this).is(':checked')) {
+	            $('#termsconditionsMSG').show();
+	            $('#termsconditionsURL').show();
+	        } else {
+	        	$('#termsconditionsMSG').hide();
+	        	$('#termsconditionsURL').hide();
 	        }
 	    });
 

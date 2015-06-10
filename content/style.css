@@ -76,6 +76,12 @@ to your current WordPress template, and if something behaves abnormal please con
 	text-align: center;
 }
 
+.cleanlogin-form label.cleanlogin-terms {
+	text-align: inherit;
+	font-size: inherit;
+	text-transform: inherit;
+}
+
 .cleanlogin-field,
 .cleanlogin-form input[type="submit"] {
 	margin-bottom: 20px;
