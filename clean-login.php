@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Clean_Login
- * @version 1.5
+ * @version 1.5.1
  */
 /*
 Plugin Name: Clean Login
 Plugin URI: http://cleanlogin.codection.com
 Description: Responsive Frontend Login and Registration plugin. A plugin for displaying login, register, editor and restore password forms through shortcodes. [clean-login] [clean-login-edit] [clean-login-register] [clean-login-restore]
 Author: codection
-Version: 1.5
+Version: 1.5.1
 Author URI: https://codection.com
 */
 
@@ -163,7 +163,7 @@ function show_clean_login_restore($atts) {
 
 	if ( !is_user_logged_in() ) {
 		if ( isset( $_GET['pass'] ) ) {
-			$new_password = $_GET['pass'];
+			$new_password = sanitize_text_field( $_GET['pass'] );
 			$login_url = get_option( 'cl_login_url', '');
 			require( 'content/restore-new.php' );
 		} else
@@ -633,6 +633,23 @@ function clean_login_options() {
 
     ?>
 	    <div class="wrap">
+	        <!-- donation box -->
+	        <div class="card">
+			    <h3 class="title" id="like-donate-more" style="cursor: pointer;"><?php echo __( 'Do you like it?', 'cleanlogin' ); ?> <span id="like-donate-arrow" class="dashicons dashicons-arrow-down"></span><span id="like-donate-smile" class="dashicons dashicons-smiley hidden"></span></h3>
+			    <div class="hidden" id="like-donate">
+				    <p>Hi there! We are <a href="https://twitter.com/fjcarazo" target="_blank" title="Javier Carazo">Javier Carazo</a> and <a href="https://twitter.com/ahornero" target="_blank" title="Alberto Hornero">Alberto Hornero</a> from <a href="http://codection.com">Codection</a>, developers of this plugin. We have been spending many hours to develop this plugin, we keep updating it and we always try do the best in the <a href="https://wordpress.org/support/plugin/clean-login">support forum</a>.</p>
+				    <p>If you like it, you can <strong>buy us a cup of coffee</strong> or whatever ;-)</p>
+				    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+						<input type="hidden" name="cmd" value="_s-xclick">
+						<input type="hidden" name="hosted_button_id" value="HGAS22NVY7Q8N">
+						<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+						<img alt="" border="0" src="https://www.paypalobjects.com/es_ES/i/scr/pixel.gif" width="1" height="1">
+					</form>
+					<p>Sure! You can also <strong><a href="https://wordpress.org/support/view/plugin-reviews/clean-login?filter=5">rate our plugin</a></strong> and provide us your feedback. Thanks!</p>
+				</div>
+			</div>
+			<br>
+
 	        <h2>Clean Login status</h2>
 
 	        <p><?php echo __( 'Below you can check the plugin status regarding the shortcodes usage and the pages/posts which contain  it.', 'cleanlogin' ); ?></p>
@@ -794,6 +811,7 @@ function clean_login_options() {
 
 	    <p class="submit"><input type="submit" name="Submit" class="button-primary" value="<?php echo __( 'Save Changes', 'cleanlogin' ); ?>" /></p>
         </form>
+
     </div>
     <script>
     jQuery(document).ready(function( $ ) {
@@ -851,6 +869,12 @@ function clean_login_options() {
 	        	$('#termsconditionsMSG').hide();
 	        	$('#termsconditionsURL').hide();
 	        }
+	    });
+
+	    $('#like-donate-more').click(function() {
+	        $('#like-donate').fadeToggle();
+	        $('#like-donate-arrow').toggle();
+	        $('#like-donate-smile').toggle();
 	    });
 
 	});

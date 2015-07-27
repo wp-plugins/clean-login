@@ -4,7 +4,7 @@ Donate link: http://codection.com
 Tags: form, login, registration, editor, lost password, responsive, wpml, internationalization, languages, role, CAPTCHA, honeypot, shortcode, wordpress, frontend
 Requires at least: 3.4
 Tested up to: 4.2.2
-Stable tag: 1.5
+Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -73,6 +73,11 @@ Please, refer to [Installation section](https://wordpress.org/plugins/clean-logi
 12. WPML. Certificate of Compatibility
 
 == Changelog ==
+
+= 1.5.1 =
+*   Spanish translation updated
+*   Donation link included
+*   Reflected XSS vulnerability fixed. Thanks to [HSASec-Team](https://www.HSASec.de)
 
 = 1.5 =
 *   Spanish translation updated
