@@ -289,7 +289,6 @@ function clean_login_load_before_headers() {
 
 			// REGISTER a new user
 			} else if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'register' ) {
-				$url = esc_url( add_query_arg( 'created', 'success', $url ) );
 
 				// check if captcha is checked
 				$enable_captcha = get_option( 'cl_antispam' ) == 'on' ? true : false;
@@ -307,7 +306,16 @@ function clean_login_load_before_headers() {
     			$termsconditions = get_option( 'cl_termsconditions' ) == 'on' ? true : false;
     			// check if the email as username is checked
     			$emailusername = get_option('cl_email_username') != 'on' ? true : false;
+    			// check if ask once for password is checked
     			$singlepassword = get_option('cl_single_password') != 'on' ? true : false;
+    			// check if automatic login in on registration is checked
+    			$automaticlogin = get_option('cl_automatic_login', false) != '' ? true : false;
+
+    			log_me(get_option('cl_url_redirect'));
+    			if( $automaticlogin )
+    				$url = esc_url(get_option('cl_url_redirect'));
+
+    			$url = esc_url( add_query_arg( 'created', 'success', $url ) );
 
     			//if email as username is checked then use email as username
     			if ($emailusername)
@@ -385,6 +393,9 @@ function clean_login_load_before_headers() {
 					}
 				}
 
+				//if automatic login is enabled then log the user in and redirect them.
+				if($automaticlogin)
+					wp_signon(array('user_login' => $username, 'user_password' => $pass1), false);
 				wp_safe_redirect( $url );
 
 			// RESTORE a password by sending an email with the activation link
@@ -731,6 +742,8 @@ function clean_login_options() {
         update_option( 'cl_termsconditionsURL', isset( $_POST['termsconditionsURL'] ) ? $_POST['termsconditionsURL'] : '' );
         update_option( 'cl_email_username', isset( $_POST['emailusername'] ) ? $_POST['emailusername'] : '' );
         update_option( 'cl_single_password', isset( $_POST['singlepassword'] ) ? $_POST['singlepassword'] : '' );
+        update_option( 'cl_automatic_login', isset( $_POST['automaticlogin'] ) ? $_POST['automaticlogin'] : '' );
+        update_option( 'cl_url_redirect', isset($_POST['automaticlogin']) && isset($_POST['urlredirect']) ? esc_url_raw($_POST['urlredirect']) : home_url() );
         
 		echo '<div class="updated"><p><strong>'. __( 'Settings saved.', 'cleanlogin' ) .'</strong></p></div>';
     }
@@ -751,6 +764,8 @@ function clean_login_options() {
     $termsconditionsURL = get_option ( 'cl_termsconditionsURL' );
     $emailusername = get_option('cl_email_username');
     $singlepassword = get_option('cl_single_password');
+    $automaticlogin = get_option('cl_automatic_login', false) ? true: false;
+    $urlredirect = get_option('cl_url_redirect', false) ? esc_url(get_option('cl_url_redirect')): home_url();
 
     ?>
     	<form name="form1" method="post" action="">
@@ -834,6 +849,13 @@ function clean_login_options() {
 						
 					</td>
 				</tr>
+				<tr>
+					<th scope="row"><?php echo __( 'Automatically Login after Registration', 'cleanlogin' ); ?></th>
+					<td>
+						<label><input name="automaticlogin" type="checkbox" id="automaticlogin" <?php if( $automaticlogin != '' ) echo 'checked="checked"'; ?>><?php echo __( 'Automatically Login after registration?', 'cleanlogin' ); ?></label>
+						<p><label><input type="text" name="urlredirect" id="urlredirect" value="<?php echo $urlredirect; ?>"><?php echo __( 'URL after registration (if blank then homepage)', 'cleanlogin' ); ?></label></p>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 		<input type="hidden" name="<?php echo $hidden_field_name; ?>" value="<?php echo $hidden_field_value; ?>">
@@ -855,7 +877,13 @@ function clean_login_options() {
 		});
 
     	if ($('#chooserole').is(':checked')) {
-            $('#newuserroles').show();
+            $('#urlredirect').show();
+        } else {
+        	$('#urlredirect').hide();
+        }
+
+        if ($('#automaticlogin').is(':checked')) {
+            $('#urlredirect').show();
         } else {
         	$('#newuserroles').hide();
         }
