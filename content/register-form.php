@@ -2,10 +2,12 @@
 	<form class="cleanlogin-form" method="post" action="#">
 
 		<fieldset>
-
-			<div class="cleanlogin-field">
-				<input class="cleanlogin-field-username" type="text" name="username" value="" placeholder="<?php echo __( 'Username', 'cleanlogin' ); ?>">
-			</div>
+			
+			<?php /*check if email as username is checked */ if ( get_option( 'cl_email_username' ) != 'on' ) : ?>
+				<div class="cleanlogin-field">
+					<input class="cleanlogin-field-username" type="text" name="username" value="" placeholder="<?php echo __( 'Username', 'cleanlogin' ); ?>">
+				</div>
+			<?php endif; ?>
 			
 			<div class="cleanlogin-field">
 				<input class="cleanlogin-field-email" type="email" name="email" value="" placeholder="<?php echo __( 'E-mail', 'cleanlogin' ); ?>">
@@ -16,13 +18,16 @@
 				<input type='text' name='website' value=" ">
 			</div>
 			
+			
 			<div class="cleanlogin-field">
 				<input class="cleanlogin-field-password" type="password" name="pass1" value="" autocomplete="off" placeholder="<?php echo __( 'New password', 'cleanlogin' ); ?>">
 			</div>
 			
-			<div class="cleanlogin-field">
-				<input class="cleanlogin-field-password" type="password" name="pass2" value="" autocomplete="off" placeholder="<?php echo __( 'Confirm password', 'cleanlogin' ); ?>">
-			</div>
+			<?php /*check if email as username is checked */ if ( get_option( 'cl_single_password' ) != 'on' ) : ?>
+				<div class="cleanlogin-field">
+					<input class="cleanlogin-field-password" type="password" name="pass2" value="" autocomplete="off" placeholder="<?php echo __( 'Confirm password', 'cleanlogin' ); ?>">
+				</div>
+			<?php endif; ?>
 
 			<?php /*check if captcha is checked */ if ( get_option( 'cl_antispam' ) == 'on' ) : ?>
 				<div class="cleanlogin-field">

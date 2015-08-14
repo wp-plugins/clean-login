@@ -289,17 +289,6 @@ function clean_login_load_before_headers() {
 
 			// REGISTER a new user
 			} else if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'register' ) {
-				$url = esc_url( add_query_arg( 'created', 'success', $url ) );
-
-				$username = isset( $_POST['username'] ) ? $_POST['username'] : '';
-				$email = isset( $_POST['email'] ) ? $_POST['email'] : '';
-				$pass1 = isset( $_POST['pass1'] ) ? $_POST['pass1'] : '';
-				$pass2 = isset( $_POST['pass2'] ) ? $_POST['pass2'] : '';
-				$website = isset( $_POST['website'] ) ? $_POST['website'] : '';
-				$captcha = isset( $_POST['captcha'] ) ? $_POST['captcha'] : '';
-				$captcha_session = isset( $_SESSION['cleanlogin-captcha'] ) ? $_SESSION['cleanlogin-captcha'] : '';
-				$role = isset( $_POST['role'] ) ? $_POST['role'] : '';
-				$terms = isset( $_POST['termsconditions'] ) && $_POST['termsconditions'] == 'on' ? true : false;
 
 				// check if captcha is checked
 				$enable_captcha = get_option( 'cl_antispam' ) == 'on' ? true : false;
@@ -315,6 +304,35 @@ function clean_login_load_before_headers() {
     			$emailnotificationcontent = get_option ( 'cl_emailnotificationcontent' );
     			// check if termsconditions is checked
     			$termsconditions = get_option( 'cl_termsconditions' ) == 'on' ? true : false;
+    			// check if the email as username is checked
+    			$emailusername = get_option('cl_email_username') != 'on' ? true : false;
+    			// check if ask once for password is checked
+    			$singlepassword = get_option('cl_single_password') != 'on' ? true : false;
+    			// check if automatic login in on registration is checked
+    			$automaticlogin = get_option('cl_automatic_login', false) != '' ? true : false;
+
+    			if( $automaticlogin )
+    				$url = esc_url(get_option('cl_url_redirect'));
+
+    			$url = esc_url( add_query_arg( 'created', 'success', $url ) );
+
+    			//if email as username is checked then use email as username
+    			if ($emailusername)
+    				$username = isset( $_POST['username'] ) ? $_POST['username'] : '';
+				else 
+					$username = isset( $_POST['email'] ) ? $_POST['email'] : '';
+				$email = isset( $_POST['email'] ) ? $_POST['email'] : '';
+				$pass1 = isset( $_POST['pass1'] ) ? $_POST['pass1'] : '';
+				//if single password is checked then use pass1 as pass2
+				if ($singlepassword)
+					$pass2 = isset( $_POST['pass2'] ) ? $_POST['pass2'] : '';
+				else
+					$pass2 = isset( $_POST['pass1'] ) ? $_POST['pass1'] : '';
+				$website = isset( $_POST['website'] ) ? $_POST['website'] : '';
+				$captcha = isset( $_POST['captcha'] ) ? $_POST['captcha'] : '';
+				$captcha_session = isset( $_SESSION['cleanlogin-captcha'] ) ? $_SESSION['cleanlogin-captcha'] : '';
+				$role = isset( $_POST['role'] ) ? $_POST['role'] : '';
+				$terms = isset( $_POST['termsconditions'] ) && $_POST['termsconditions'] == 'on' ? true : false;
 				
 				// terms and conditions
 				if( $termsconditions && !$terms )
@@ -374,6 +392,9 @@ function clean_login_load_before_headers() {
 					}
 				}
 
+				//if automatic login is enabled then log the user in and redirect them.
+				if($automaticlogin)
+					wp_signon(array('user_login' => $username, 'user_password' => $pass1), false);
 				wp_safe_redirect( $url );
 
 			// RESTORE a password by sending an email with the activation link
@@ -630,11 +651,11 @@ function clean_login_options() {
 	$edit_url = get_option( 'cl_edit_url');
 	$register_url = get_option( 'cl_register_url');
 	$restore_url = get_option( 'cl_restore_url');
-
     ?>
 	    <div class="wrap">
 	        <!-- donation box -->
 	        <div class="card">
+
 			    <h3 class="title" id="like-donate-more" style="cursor: pointer;"><?php echo __( 'Do you like it?', 'cleanlogin' ); ?> <span id="like-donate-arrow" class="dashicons dashicons-arrow-down"></span><span id="like-donate-smile" class="dashicons dashicons-smiley hidden"></span></h3>
 			    <div class="hidden" id="like-donate">
 				    <p>Hi there! We are <a href="https://twitter.com/fjcarazo" target="_blank" title="Javier Carazo">Javier Carazo</a> and <a href="https://twitter.com/ahornero" target="_blank" title="Alberto Hornero">Alberto Hornero</a> from <a href="http://codection.com">Codection</a>, developers of this plugin. We have been spending many hours to develop this plugin, we keep updating it and we always try do the best in the <a href="https://wordpress.org/support/plugin/clean-login">support forum</a>.</p>
@@ -718,6 +739,10 @@ function clean_login_options() {
         update_option( 'cl_termsconditions', isset( $_POST['termsconditions'] ) ? $_POST['termsconditions'] : '' );
         update_option( 'cl_termsconditionsMSG', isset( $_POST['termsconditionsMSG'] ) ? $_POST['termsconditionsMSG'] : '' );
         update_option( 'cl_termsconditionsURL', isset( $_POST['termsconditionsURL'] ) ? $_POST['termsconditionsURL'] : '' );
+        update_option( 'cl_email_username', isset( $_POST['emailusername'] ) ? $_POST['emailusername'] : '' );
+        update_option( 'cl_single_password', isset( $_POST['singlepassword'] ) ? $_POST['singlepassword'] : '' );
+        update_option( 'cl_automatic_login', isset( $_POST['automaticlogin'] ) ? $_POST['automaticlogin'] : '' );
+        update_option( 'cl_url_redirect', isset($_POST['automaticlogin']) && isset($_POST['urlredirect']) ? esc_url_raw($_POST['urlredirect']) : home_url() );
         
 		echo '<div class="updated"><p><strong>'. __( 'Settings saved.', 'cleanlogin' ) .'</strong></p></div>';
     }
@@ -736,6 +761,10 @@ function clean_login_options() {
     $termsconditions = get_option ( 'cl_termsconditions' );
     $termsconditionsMSG = get_option ( 'cl_termsconditionsMSG' );
     $termsconditionsURL = get_option ( 'cl_termsconditionsURL' );
+    $emailusername = get_option('cl_email_username');
+    $singlepassword = get_option('cl_single_password');
+    $automaticlogin = get_option('cl_automatic_login', false) ? true: false;
+    $urlredirect = get_option('cl_url_redirect', false) ? esc_url(get_option('cl_url_redirect')): home_url();
 
     ?>
     	<form name="form1" method="post" action="">
@@ -805,6 +834,27 @@ function clean_login_options() {
 						<p><input name="termsconditionsURL" type="url" id="termsconditionsURL" value="<?php echo $termsconditionsURL; ?>" placeholder="<?php echo __( 'Target URL', 'cleanlogin' ); ?>" class="regular-text"></p>
 					</td>
 				</tr>
+				<tr>
+					<th scope="row"><?php echo __( 'Use Email as Username', 'cleanlogin' ); ?></th>
+					<td>
+						<label><input name="emailusername" type="checkbox" id="emailusername" <?php if( $emailusername == 'on' ) echo 'checked="checked"'; ?>><?php echo __( 'Allow user to use email as username?', 'cleanlogin' ); ?></label>
+						
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php echo __( 'Single Password', 'cleanlogin' ); ?></th>
+					<td>
+						<label><input name="singlepassword" type="checkbox" id="singlepassword" <?php if( $singlepassword == 'on' ) echo 'checked="checked"'; ?>><?php echo __( 'Only ask for password once on registration form?', 'cleanlogin' ); ?></label>
+						
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php echo __( 'Automatically Login after Registration', 'cleanlogin' ); ?></th>
+					<td>
+						<label><input name="automaticlogin" type="checkbox" id="automaticlogin" <?php if( $automaticlogin != '' ) echo 'checked="checked"'; ?>><?php echo __( 'Automatically Login after registration?', 'cleanlogin' ); ?></label>
+						<p id="urlredirect"><label><input type="text" name="urlredirect" value="<?php echo $urlredirect; ?>"><?php echo __( 'URL after registration (if blank then homepage)', 'cleanlogin' ); ?></label></p>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 		<input type="hidden" name="<?php echo $hidden_field_name; ?>" value="<?php echo $hidden_field_value; ?>">
@@ -832,12 +882,18 @@ function clean_login_options() {
         }
 
     	$('#chooserole').click(function() {
-	        if ($(this).is(':checked')) {
-	            $('#newuserroles').show();
-	        } else {
-	        	$('#newuserroles').hide();
-	        }
+	       $('#newuserroles').toggle();
 	    });
+
+	    if ($('#automaticlogin').is(':checked')) {
+            $('#urlredirect').show();
+        } else {
+        	$('#urlredirect').hide();
+        }
+
+        $('#automaticlogin').click(function() {
+    		$('#urlredirect').toggle();
+    	});
 
 		if ($('#emailnotification').is(':checked')) {
             $('#emailnotificationcontent').show();
