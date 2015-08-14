@@ -23,10 +23,11 @@
 				<input class="cleanlogin-field-password" type="password" name="pass1" value="" autocomplete="off" placeholder="<?php echo __( 'New password', 'cleanlogin' ); ?>">
 			</div>
 			
-			
-			<div class="cleanlogin-field">
-				<input class="cleanlogin-field-password" type="password" name="pass2" value="" autocomplete="off" placeholder="<?php echo __( 'Confirm password', 'cleanlogin' ); ?>">
-			</div>
+			<?php /*check if email as username is checked */ if ( get_option( 'cl_single_password' ) != 'on' ) : ?>
+				<div class="cleanlogin-field">
+					<input class="cleanlogin-field-password" type="password" name="pass2" value="" autocomplete="off" placeholder="<?php echo __( 'Confirm password', 'cleanlogin' ); ?>">
+				</div>
+			<?php endif; ?>
 
 			<?php /*check if captcha is checked */ if ( get_option( 'cl_antispam' ) == 'on' ) : ?>
 				<div class="cleanlogin-field">

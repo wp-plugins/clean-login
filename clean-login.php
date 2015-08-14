@@ -307,6 +307,7 @@ function clean_login_load_before_headers() {
     			$termsconditions = get_option( 'cl_termsconditions' ) == 'on' ? true : false;
     			// check if the email as username is checked
     			$emailusername = get_option('cl_email_username') != 'on' ? true : false;
+    			$singlepassword = get_option('cl_single_password') != 'on' ? true : false;
 
     			//if email as username is checked then use email as username
     			if ($emailusername)
@@ -315,7 +316,11 @@ function clean_login_load_before_headers() {
 					$username = isset( $_POST['email'] ) ? $_POST['email'] : '';
 				$email = isset( $_POST['email'] ) ? $_POST['email'] : '';
 				$pass1 = isset( $_POST['pass1'] ) ? $_POST['pass1'] : '';
-				$pass2 = isset( $_POST['pass2'] ) ? $_POST['pass2'] : '';
+				//if single password is checked then use pass1 as pass2
+				if ($singlepassword)
+					$pass2 = isset( $_POST['pass2'] ) ? $_POST['pass2'] : '';
+				else
+					$pass2 = isset( $_POST['pass1'] ) ? $_POST['pass1'] : '';
 				$website = isset( $_POST['website'] ) ? $_POST['website'] : '';
 				$captcha = isset( $_POST['captcha'] ) ? $_POST['captcha'] : '';
 				$captcha_session = isset( $_SESSION['cleanlogin-captcha'] ) ? $_SESSION['cleanlogin-captcha'] : '';
@@ -725,6 +730,7 @@ function clean_login_options() {
         update_option( 'cl_termsconditionsMSG', isset( $_POST['termsconditionsMSG'] ) ? $_POST['termsconditionsMSG'] : '' );
         update_option( 'cl_termsconditionsURL', isset( $_POST['termsconditionsURL'] ) ? $_POST['termsconditionsURL'] : '' );
         update_option( 'cl_email_username', isset( $_POST['emailusername'] ) ? $_POST['emailusername'] : '' );
+        update_option( 'cl_single_password', isset( $_POST['singlepassword'] ) ? $_POST['singlepassword'] : '' );
         
 		echo '<div class="updated"><p><strong>'. __( 'Settings saved.', 'cleanlogin' ) .'</strong></p></div>';
     }
@@ -744,6 +750,7 @@ function clean_login_options() {
     $termsconditionsMSG = get_option ( 'cl_termsconditionsMSG' );
     $termsconditionsURL = get_option ( 'cl_termsconditionsURL' );
     $emailusername = get_option('cl_email_username');
+    $singlepassword = get_option('cl_single_password');
 
     ?>
     	<form name="form1" method="post" action="">
@@ -817,6 +824,13 @@ function clean_login_options() {
 					<th scope="row"><?php echo __( 'Use Email as Username', 'cleanlogin' ); ?></th>
 					<td>
 						<label><input name="emailusername" type="checkbox" id="emailusername" <?php if( $emailusername == 'on' ) echo 'checked="checked"'; ?>><?php echo __( 'Allow user to use email as username?', 'cleanlogin' ); ?></label>
+						
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php echo __( 'Single Password', 'cleanlogin' ); ?></th>
+					<td>
+						<label><input name="singlepassword" type="checkbox" id="singlepassword" <?php if( $singlepassword == 'on' ) echo 'checked="checked"'; ?>><?php echo __( 'Only ask for password once on registration form?', 'cleanlogin' ); ?></label>
 						
 					</td>
 				</tr>
