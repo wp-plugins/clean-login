@@ -311,7 +311,6 @@ function clean_login_load_before_headers() {
     			// check if automatic login in on registration is checked
     			$automaticlogin = get_option('cl_automatic_login', false) != '' ? true : false;
 
-    			log_me(get_option('cl_url_redirect'));
     			if( $automaticlogin )
     				$url = esc_url(get_option('cl_url_redirect'));
 
@@ -853,7 +852,7 @@ function clean_login_options() {
 					<th scope="row"><?php echo __( 'Automatically Login after Registration', 'cleanlogin' ); ?></th>
 					<td>
 						<label><input name="automaticlogin" type="checkbox" id="automaticlogin" <?php if( $automaticlogin != '' ) echo 'checked="checked"'; ?>><?php echo __( 'Automatically Login after registration?', 'cleanlogin' ); ?></label>
-						<p><label><input type="text" name="urlredirect" id="urlredirect" value="<?php echo $urlredirect; ?>"><?php echo __( 'URL after registration (if blank then homepage)', 'cleanlogin' ); ?></label></p>
+						<p id="urlredirect"><label><input type="text" name="urlredirect" value="<?php echo $urlredirect; ?>"><?php echo __( 'URL after registration (if blank then homepage)', 'cleanlogin' ); ?></label></p>
 					</td>
 				</tr>
 			</tbody>
@@ -877,24 +876,24 @@ function clean_login_options() {
 		});
 
     	if ($('#chooserole').is(':checked')) {
-            $('#urlredirect').show();
-        } else {
-        	$('#urlredirect').hide();
-        }
-
-        if ($('#automaticlogin').is(':checked')) {
-            $('#urlredirect').show();
+            $('#newuserroles').show();
         } else {
         	$('#newuserroles').hide();
         }
 
     	$('#chooserole').click(function() {
-	        if ($(this).is(':checked')) {
-	            $('#newuserroles').show();
-	        } else {
-	        	$('#newuserroles').hide();
-	        }
+	       $('#newuserroles').toggle();
 	    });
+
+	    if ($('#automaticlogin').is(':checked')) {
+            $('#urlredirect').show();
+        } else {
+        	$('#urlredirect').hide();
+        }
+
+        $('#automaticlogin').click(function() {
+    		$('#urlredirect').toggle();
+    	});
 
 		if ($('#emailnotification').is(':checked')) {
             $('#emailnotificationcontent').show();
